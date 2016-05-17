@@ -17,16 +17,8 @@ public class Main {
 		frame.pack();
 		frame.setVisible(true);
 		
-		
-		
-		
-		
-		
-		
-		
-		
 		//Sample code to test that the graphics will update
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		Board.setPiece(2, 0, 0);
 		Board.setPiece(3, 1, 1);
 		
