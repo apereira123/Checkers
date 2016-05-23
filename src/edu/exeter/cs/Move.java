@@ -2,11 +2,10 @@ package edu.exeter.cs;
 
 public class Move {
 
-	int fromRow, fromCol;  // Position of piece to be moved.
-	int toRow, toCol;      // Square it is to move to.
+	int fromRow, fromCol, toRow, toCol;
 	
 	public Move(int r1, int c1, int r2, int c2) {
-		// Constructor.  Just set the values of the instance variables.
+		//Constructs a move.
 		fromRow = r1;
 		fromCol = c1;
 		toRow = r2;
@@ -14,9 +13,7 @@ public class Move {
 	}
 	
 	public boolean isJump() {
-		// Test whether this move is a jump.  It is assumed that
-		// the move is legal.  In a jump, the piece moves two
-		// rows.  (In a regular move, it only moves one row.)
+		//Assuming the move is legal, this method returns true if the move is a jump.
 		return (fromRow - toRow == 2 || fromRow - toRow == -2);
 	}
 	

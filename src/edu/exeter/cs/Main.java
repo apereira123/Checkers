@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class Main {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		
 		//Create the frame and add the panel to it
 		JFrame frame = new JFrame("Checker Board");

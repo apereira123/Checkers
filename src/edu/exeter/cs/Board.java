@@ -4,16 +4,18 @@ import java.util.Vector;
 
 public class Board {
 
-	public static final int 
+	public static final int //Create constants to refer to the pieces in the array.
 	EMPTY = 0,
 	WHITE = 1,
 	BLACK = 2,
 	WHITE_KING = 3,
 	BLACK_KING = 4;
 
-	private static int[][] board = new int[8][8];
+	private static int[][] board = new int[8][8]; //Create a 2-Dimensional array of all the pieces on the board.
 	
 	public static void setupBoard() {
+		
+		//Set the corresponding spaces to the values of the piece at that position.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if ( row % 2 == col % 2 ) {
@@ -29,34 +31,33 @@ public class Board {
 				}
 			}
 		}
+		
 	}
 
 	public static int getPiece(int row, int col) {
+		//Return the piece at the specified row and column.
 		return board[row][col];
 	}
 
 	public static void setPiece(int row, int col, int rank) {
+		//Set the value of the piece at the specified row and column.
 		board[row][col] = rank;
 	}
 
 	public static void makeMove(Move move) {
-		// Make the specified move.  It is assumed that move
-		// is non-null and that the move it represents is legal.
+		//Assuming the move is a legal move, this will make the specified move.
 		makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
 	}   
 
 	public static void makeMove(int fromRow, int fromCol, int toRow, int toCol) {
-		// Make the move from (fromRow,fromCol) to (toRow,toCol).  It is
-		// assumed that this move is legal.  If the move is a jump, the
-		// jumped piece is removed from the board.  If a piece moves
-		// the last row on the opponent's side of the board, the 
-		// piece becomes a king.
+		//This method takes care of the logic to move a piece. 
+		//If the move is a jump, the jumped piece will be removed.
+		//If the move results in the piece becoming a king, the piece is set to a king.
 		board[toRow][toCol] = board[fromRow][fromCol];
 		board[fromRow][fromCol] = EMPTY;
 		if (fromRow - toRow == 2 || fromRow - toRow == -2) {
-			// The move is a jump.  Remove the jumped piece from the board.
-			int jumpRow = (fromRow + toRow) / 2;  // Row of the jumped piece.
-			int jumpCol = (fromCol + toCol) / 2;  // Column of the jumped piece.
+			int jumpRow = (fromRow + toRow) / 2;
+			int jumpCol = (fromCol + toCol) / 2;
 			board[jumpRow][jumpCol] = EMPTY;
 		}
 		if (toRow == 0 && board[toRow][toCol] == WHITE)
@@ -67,30 +68,24 @@ public class Board {
 
 
 	public static Move[] getLegalMoves(int player) {
-		// Return an array containing all the legal CheckersMoves
-		// for the specified player on the current board.  If the player
-		// has no legal moves, null is returned.  The value of player
-		// should be one of the constants RED or BLACK; if not, null
-		// is returned.  If the returned value is non-null, it consists
-		// entirely of jump moves or entirely of regular moves, since
-		// if the player can jump, only jumps are legal moves.
+		//Returns an array with all the legal moves for the player on the board.
+		//If there are no legal moves the method returns null.
+		//Since a player must jump if they are able to, the legal moves will be
+		//either all jumps or all regular moves.
 
 		if (player != WHITE && player != BLACK)
 			return null;
 
-		int playerKing;  // The constant representing a King belonging to player.
+		int playerKing;
 		if (player == WHITE)
 			playerKing = WHITE_KING;
 		else
 			playerKing = BLACK_KING;
 
-		Vector<Move> moves = new Vector<Move>();  // Moves will be stored in this vector.
+		Vector<Move> moves = new Vector<Move>();
 
-		/*  First, check for any possible jumps.  Look at each square on the board.
-	          If that square contains one of the player's pieces, look at a possible
-	          jump in each of the four directions from that square.  If there is 
-	          a legal jump in that direction, put it in the moves vector.
-		 */
+		//Here we check for jumps first. If there are any legal jumps in
+		//any of the four directions of travel the move is added to the vector.
 
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -107,13 +102,8 @@ public class Board {
 			}
 		}
 
-		/*  If any jump moves were found, then the user must jump, so we don't 
-	          add any regular moves.  However, if no jumps were found, check for
-	          any legal regular moves.  Look at each square on the board.
-	          If that square contains one of the player's pieces, look at a possible
-	          move in each of the four directions from that square.  If there is 
-	          a legal move in that direction, put it in the moves vector.
-		 */
+		//Next, if we have not found any legal jumps, we check for any
+		//legal moves and add them to the vector.
 
 		if (moves.size() == 0) {
 			for (int row = 0; row < 8; row++) {
@@ -132,9 +122,8 @@ public class Board {
 			}
 		}
 
-		/* If no legal moves have been found, return null.  Otherwise, create
-	         an array just big enough to hold all the legal moves, copy the
-	         legal moves from the vector into the array, and return the array. */
+		//If not legal moves are found, we return null, otherwise we
+		//create an array large enough to hold all of the legal moves.
 
 		if (moves.size() == 0)
 			return null;
@@ -145,7 +134,7 @@ public class Board {
 			return moveArray;
 		}
 
-	}  // end getLegalMoves
+	}
 
 
 	public static Move[] getLegalJumpsFrom(int player, int row, int col) {
@@ -197,7 +186,7 @@ public class Board {
 
 		if (player == WHITE) {
 			if (board[r1][c1] == WHITE && r3 > r1)
-				return false;  // Regular red piece can only move  up.
+				return false;  // Regular white piece can only move  up.
 			if (board[r2][c2] != BLACK && board[r2][c2] != BLACK_KING)
 				return false;  // There is no black piece to jump.
 			return true;  // The jump is legal.
@@ -206,7 +195,7 @@ public class Board {
 			if (board[r1][c1] == BLACK && r3 < r1)
 				return false;  // Regular black piece can only move down.
 			if (board[r2][c2] != WHITE && board[r2][c2] != WHITE_KING)
-				return false;  // There is no red piece to jump.
+				return false;  // There is no white piece to jump.
 			return true;  // The jump is legal.
 		}
 
@@ -227,7 +216,7 @@ public class Board {
 
 		if (player == WHITE) {
 			if (board[r1][c1] == WHITE && r2 > r1)
-				return false;  // Regular red piece can only move down.
+				return false;  // Regular white piece can only move down.
 			return true;  // The move is legal.
 		}
 		else {
