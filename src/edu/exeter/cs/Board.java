@@ -11,10 +11,9 @@ public class Board {
 	WHITE_KING = 3,
 	BLACK_KING = 4;
 
-	private static int[][] board;
-
+	private static int[][] board = new int[8][8];
+	
 	public static void setupBoard() {
-		board = new int[8][8];
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if ( row % 2 == col % 2 ) {

@@ -179,9 +179,6 @@ class BoardGraphics extends JPanel implements ActionListener {
 		setBackground(Color.gray);
 		setPreferredSize(new Dimension(700, 700));
 
-		//setup board
-		Board.setupBoard();
-
 		//create buttons
 		createButtons();
 
