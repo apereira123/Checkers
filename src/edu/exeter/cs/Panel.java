@@ -390,27 +390,7 @@ class BoardGraphics extends JPanel implements ActionListener {
 
 		Panel.setSelectedRow(-1);
 
-		/* As a courtesy to the user, if all legal moves use the same piece, then
-       select that piece automatically so the use won't have to click on it
-       to select it. */
-
-		if (legalMoves != null) {
-			boolean sameStartSquare = true;
-			for (int i = 1; i < legalMoves.length; i++)
-				if (legalMoves[i].fromRow != legalMoves[0].fromRow
-				|| legalMoves[i].fromCol != legalMoves[0].fromCol) {
-					sameStartSquare = false;
-					break;
-				}
-			if (sameStartSquare) {
-				Panel.setSelectedRow(legalMoves[0].fromRow);;
-				Panel.setSelectedCol(legalMoves[0].fromCol);;
-			}
-		}
-
-		/* Make sure the board is redrawn in its new state. */
-
-		BoardGraphics.drawButtons();
+		//BoardGraphics.drawButtons();
 
 	}  // end doMakeMove();
 	
