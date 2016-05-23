@@ -112,25 +112,22 @@ public class Board {
 			}
 		}
 
-		//Next, if we have not found any legal jumps, we check for any
-		//legal moves and add them to the vector.
+		//Next we check for any legal moves and add them to the vector.
 
-		if (moves.size() == 0) {
-			for (int row = 0; row < 8; row++) {
-				for (int col = 0; col < 8; col++) {
-					if (board[row][col] == player || board[row][col] == playerKing) {
-						if (canMove(player,row,col,row+1,col+1)) {
-							moves.addElement(new Move(row,col,row+1,col+1));
-						}
-						if (canMove(player,row,col,row-1,col+1)) {
-							moves.addElement(new Move(row,col,row-1,col+1));
-						}
-						if (canMove(player,row,col,row+1,col-1)) {
-							moves.addElement(new Move(row,col,row+1,col-1));
-						}
-						if (canMove(player,row,col,row-1,col-1)) {
-							moves.addElement(new Move(row,col,row-1,col-1));
-						}
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (board[row][col] == player || board[row][col] == playerKing) {
+					if (canMove(player,row,col,row+1,col+1)) {
+						moves.addElement(new Move(row,col,row+1,col+1));
+					}
+					if (canMove(player,row,col,row-1,col+1)) {
+						moves.addElement(new Move(row,col,row-1,col+1));
+					}
+					if (canMove(player,row,col,row+1,col-1)) {
+						moves.addElement(new Move(row,col,row+1,col-1));
+					}
+					if (canMove(player,row,col,row-1,col-1)) {
+						moves.addElement(new Move(row,col,row-1,col-1));
 					}
 				}
 			}
@@ -194,7 +191,7 @@ public class Board {
 			}
 			return moveArray;
 		}
-	}  // end getLegalMovesFrom()
+	}  // end getLegalJumpsFrom()
 
 
 	private static boolean canJump(int player, int r1, int c1, int r2, int c2, int r3, int c3) {

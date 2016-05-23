@@ -70,11 +70,11 @@ public class UserInterface extends JPanel implements ActionListener {
 
 	void doNewGame() {
 		Board.setupBoard();   // Set up the pieces.
-		BoardGraphics.drawButtons();
+		BoardGraphics.setIcons();
 		Panel.setPlayer(Board.WHITE);;   // WHITE moves first.
 		BoardGraphics.setLegalMoves(Board.getLegalMoves(Board.WHITE));  // Get WHITE's legal moves.
-		BoardGraphics.drawBorder();   //draw border
 		Panel.setSelectedRow(-1);   // WHITE has not yet selected a piece to move.
+		BoardGraphics.setBorders();
 		label.setText("WHITE:  Make your move.");
 		playing = true;
 		newGame.setEnabled(false);

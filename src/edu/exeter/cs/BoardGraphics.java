@@ -35,13 +35,10 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		addButtons();
 
 		//draw buttons
-		drawButtons();
+		setIcons();
 
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				buttons[row][col].setBorderPainted(false);
-			}
-		}
+		//set the border not to be painted
+		setBorderPaintedFalse();
 	}
 
 	public void createButtons() {
@@ -72,8 +69,16 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
+	public void addButtons() {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				add(buttons[i][j]);
+			}
+		}
+	}
 
-	public static void drawButtons() {
+	public static void setIcons() {
 		ImageIcon whitePawn = new ImageIcon("resources/white_pawn.png");
 		whitePawn.setImage(whitePawn.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
 		ImageIcon blackPawn = new ImageIcon("resources/black_pawn.png");
@@ -104,44 +109,37 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 	}
-
-	public static void drawBorder() {
-		if (row != Panel.getSelectedRow() && col != Panel.getSelectedCol()) {
-			for (int row = 0; row < 8; row++) {
-				for (int col = 0; col < 8; col++) {
-					buttons[row][col].setBorderPainted(true);
-					for (int i = 0; i < legalMoves.length; i++) {
-						if (row == legalMoves[i].fromRow && col == legalMoves[i].fromCol) {
-							buttons[row][col].setBorder(new LineBorder(Color.darkGray, 5));
-						}
-						else {
-							buttons[row][col].setBorder(null);
-						}
-					}
-				}
+	
+	public static void setBorderPaintedFalse() {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				buttons[row][col].setBorderPainted(false);
 			}
 		}
-		else {
-			for (int row = 0; row < 8; row++) {
-				for (int col = 0; col < 8; col++) {
-					for (int i = 0; i < legalMoves.length; i++) {
-						if (row == legalMoves[i].toRow && col == legalMoves[i].toCol) {
-							buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(Color.darkGray, 5));
-						}
-						else {
-							buttons[row][col].setBorder(null);
-						}
-					}
-				}
+	}
+	
+	public static void setBorderPaintedTrue() {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				buttons[row][col].setBorderPainted(true);
+				buttons[row][col].setBorder(null);
 			}
 		}
 	}
 
-	public void addButtons() {
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				add(buttons[i][j]);
-			}
+	public static void setBorders() {
+		setBorderPaintedTrue();
+		if (Panel.selectedRow == -1) {
+			for (int i = 0; i < legalMoves.length; i++) {
+				buttons[legalMoves[i].fromRow][legalMoves[i].fromCol].setBorder(new LineBorder(new Color(255, 255, 255), 3));
+			} 
+		}
+		else {
+			for (int i = 0; i < legalMoves.length; i++) {
+				if (Panel.getSelectedRow() == legalMoves[i].fromRow && Panel.getSelectedCol() == legalMoves[i].fromCol) {
+					buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(new Color(255, 255, 255), 3));
+				}
+			} 
 		}
 	}
 
@@ -153,16 +151,14 @@ public class BoardGraphics extends JPanel implements ActionListener {
 	}
 
 	void doClickSquare(int row, int col) {
-		// This is called by mousePressed() when a player clicks on the
-		// square in the specified row and col.  It has already been checked
-		// that a game is, in fact, in progress.
 
 		/* If the player clicked on one of the pieces that the player
        can move, mark this row and col as selected and return.  (This
        might change a previous selection.)  Reset the message, in
        case it was previously displaying an error message. */
-
-		drawBorder();
+		
+		setBorders();
+		
 		for (int i = 0; i < legalMoves.length; i++)
 			if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
 				Panel.setSelectedRow(row);
@@ -173,12 +169,12 @@ public class BoardGraphics extends JPanel implements ActionListener {
 				else {
 					UserInterface.setLabel("BLACK:  Make your move.");
 				}
+				setBorders();
 				return;
 			}
 
 		/* If no piece has been selected to be moved, the user must first
        select a piece.  Show an error message and return. */
-		drawBorder();
 		if (Panel.getSelectedRow() < 0) {
 			UserInterface.setLabel("Click the piece you want to move.");
 			return;
@@ -186,7 +182,10 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 		/* If the user clicked on a square where the selected piece can be
        legally moved, then make the move and return. */
-		drawBorder();
+		
+		
+		setBorders();
+		
 		for (int i = 0; i < legalMoves.length; i++) {
 			if (legalMoves[i].fromRow == Panel.getSelectedRow() && legalMoves[i].fromCol == Panel.getSelectedCol() && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
 				doMakeMove(legalMoves[i]);
@@ -226,9 +225,9 @@ public class BoardGraphics extends JPanel implements ActionListener {
 					UserInterface.setLabel("BLACK:  You must continue jumping.");
 				}
 				Panel.setSelectedRow(move.toRow);  // Since only one piece can be moved, select it.
-				Panel.setSelectedRow(move.toCol);
-				drawButtons();
-				drawBorder();
+				Panel.setSelectedCol(move.toCol);
+				setIcons();
+				setBorders();
 				return;
 			}
 		}
@@ -240,12 +239,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		if (Panel.getPlayer() == Board.WHITE) {
 			Panel.setPlayer(Board.BLACK);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
-			drawBorder();
 			if (legalMoves == null) {
 				UserInterface.gameOver("BLACK has no moves.  WHITE wins.");
-			}
-			else if (legalMoves[0].isJump()) {
-				UserInterface.setLabel("BLACK:  Make your move.  You must jump.");	
 			}
 			else {
 				UserInterface.setLabel("BLACK:  Make your move.");
@@ -254,12 +249,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		else {
 			Panel.setPlayer(Board.WHITE);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
-			drawBorder();
 			if (legalMoves == null) {
 				UserInterface.gameOver("WHITE has no moves.  BLACK wins.");
-			}
-			else if (legalMoves[0].isJump()) {
-				UserInterface.setLabel("WHITE:  Make your move.  You must jump.");
 			}
 			else {
 				UserInterface.setLabel("WHITE:  Make your move.");
@@ -271,8 +262,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 		Panel.setSelectedRow(-1);
 
-		drawButtons();
-		drawBorder();
+		setIcons();
+		setBorders();
 
 	}  // end doMakeMove();
 
