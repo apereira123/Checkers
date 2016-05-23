@@ -390,7 +390,7 @@ class BoardGraphics extends JPanel implements ActionListener {
 
 		Panel.setSelectedRow(-1);
 
-		//BoardGraphics.drawButtons();
+		BoardGraphics.drawButtons();
 
 	}  // end doMakeMove();
 	
