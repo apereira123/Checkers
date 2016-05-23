@@ -131,13 +131,13 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		setBorderPaintedTrue();
 		if (Panel.selectedRow == -1) {
 			for (int i = 0; i < legalMoves.length; i++) {
-				buttons[legalMoves[i].fromRow][legalMoves[i].fromCol].setBorder(new LineBorder(new Color(255, 255, 255), 4));
+				buttons[legalMoves[i].fromRow][legalMoves[i].fromCol].setBorder(new LineBorder(new Color(255, 255, 255), 5));
 			} 
 		}
 		else {
 			for (int i = 0; i < legalMoves.length; i++) {
 				if (Panel.getSelectedRow() == legalMoves[i].fromRow && Panel.getSelectedCol() == legalMoves[i].fromCol) {
-					buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(new Color(255, 255, 255), 4));
+					buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(new Color(255, 255, 255), 5));
 				}
 			} 
 		}
