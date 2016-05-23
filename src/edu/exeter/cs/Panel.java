@@ -3,78 +3,80 @@ package edu.exeter.cs;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.util.Scanner;
 
 @SuppressWarnings("serial")
 public class Panel extends JPanel {
-	
+
 	public static int player;
 	public static int selectedRow;
 	public static int selectedCol;
-	
+
 	public Panel() {
 		setLayout(new GridBagLayout());
-		
+
 		BoardGraphics board1 = new BoardGraphics();
 		UserInterface board2 = new UserInterface();
-		
+
 		GridBagConstraints c1 = new GridBagConstraints();
 		c1.gridwidth = 8;
 		c1.gridheight = 8;
 		c1.gridx = 0;
 		c1.gridy = 0;
-		
+
 		GridBagConstraints c2 = new GridBagConstraints();
 		c2.gridwidth = 8;
 		c2.gridheight = 1;
 		c2.gridx = 0;
 		c2.gridy = 8;
-		
+
 		add(board1, c1);
 		add(board2, c2);
 	}
-	
+
 	public static int getPlayer() {
 		return player;
 	}
 	public static void setPlayer(int n) {
 		player = n;
 	}
-	
+
 	public static int getSelectedRow() {
 		return selectedRow;
 	}
 	public static void setSelectedRow(int n) {
 		selectedRow = n;
 	}
-	
+
 	public static int getSelectedCol() {
 		return selectedCol;
 	}
 	public static void setSelectedCol(int n) {
 		selectedCol  = n;
 	}
-	
+
 }
 
 @SuppressWarnings("serial")
 class UserInterface extends JPanel implements ActionListener {
-	
+
 	private static JButton newGame;
 	private static JLabel label;
 	private static JButton endGame;
 	private static boolean playing;
-	
+
 	public UserInterface() {
 		setLayout(new GridBagLayout());
 		setBackground(Color.gray);
 		setPreferredSize(new Dimension(700, 25));
-		
+
 		newGame = new JButton("New Game");
 		newGame.addActionListener(this);
 		newGame.setActionCommand("newGame");
 		newGame.setEnabled(true);
-		
+
 		GridBagConstraints c1 = new GridBagConstraints();
 		c1.gridwidth = 2;
 		c1.gridheight = 1;
@@ -82,23 +84,23 @@ class UserInterface extends JPanel implements ActionListener {
 		c1.gridy = 0;
 		c1.weightx = 0.2;
 		c1.fill = GridBagConstraints.HORIZONTAL;
-		
-		
+
+
 		label = new JLabel("Welcome to Checkers", JLabel.CENTER);
-		
+
 		GridBagConstraints c2 = new GridBagConstraints();
 		c2.gridwidth = 4;
 		c2.gridheight = 1;
 		c2.gridx = 2;
 		c2.gridy = 0;
 		c2.weightx = 0.9;
-		
-		
+
+
 		endGame = new JButton("End Game");
 		endGame.addActionListener(this);
 		endGame.setActionCommand("endGame");
 		endGame.setEnabled(false);
-		
+
 		GridBagConstraints c3 = new GridBagConstraints();
 		c3.gridwidth = 2;
 		c3.gridheight = 1;
@@ -106,12 +108,12 @@ class UserInterface extends JPanel implements ActionListener {
 		c3.gridy = 0;
 		c3.weightx = 0.2;
 		c3.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		add(newGame, c1);
 		add(label, c2);
 		add(endGame, c3);
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "newGame") {
 			doNewGame();
@@ -120,45 +122,46 @@ class UserInterface extends JPanel implements ActionListener {
 			doEndGame();
 		}
 	}
-	
-	void doNewGame() {
-	    Board.setupBoard();   // Set up the pieces.
-	    BoardGraphics.drawButtons();
-	    Panel.setPlayer(Board.WHITE);;   // WHITE moves first.
-	    BoardGraphics.setLegalMoves(Board.getLegalMoves(Board.WHITE));  // Get WHITE's legal moves.
-	    Panel.setSelectedRow(-1);   // WHITE has not yet selected a piece to move.
-	    label.setText("WHITE:  Make your move.");
-	    playing = true;
-	    newGame.setEnabled(false);
-	    endGame.setEnabled(true);
-	 }
-	 
 
-	 void doEndGame() {
-	        // Current player resigns.  Game ends.  Opponent wins.
-	     if (playing == false) {
-	        label.setText("There is no game in progress!");
-	        return;
-	     }
-	     if (Panel.getPlayer() == Board.WHITE)
-	        gameOver("WHITE resigns.  BLACK wins.");
-	     else
-	    	gameOver("BLACK resigns.  WHITE wins.");
-	 }
-	 
-	 public static void gameOver(String str) {
-	        // The game ends.  The parameter, str, is displayed as a message
-	        // to the user.  The states of the buttons are adjusted so players
-	        // can start a new game.
-	    label.setText(str);
-	    newGame.setEnabled(true);
-	    endGame.setEnabled(false);
-	    playing = false;
-	 }
-	 
-	 public static void setLabel(String s) {
-		 label.setText(s);
-	 }
+	void doNewGame() {
+		Board.setupBoard();   // Set up the pieces.
+		BoardGraphics.drawButtons();
+		Panel.setPlayer(Board.WHITE);;   // WHITE moves first.
+		BoardGraphics.setLegalMoves(Board.getLegalMoves(Board.WHITE));  // Get WHITE's legal moves.
+		BoardGraphics.drawBorder();   //draw border
+		Panel.setSelectedRow(-1);   // WHITE has not yet selected a piece to move.
+		label.setText("WHITE:  Make your move.");
+		playing = true;
+		newGame.setEnabled(false);
+		endGame.setEnabled(true);
+	}
+
+
+	void doEndGame() {
+		// Current player resigns.  Game ends.  Opponent wins.
+		if (playing == false) {
+			label.setText("There is no game in progress!");
+			return;
+		}
+		if (Panel.getPlayer() == Board.WHITE)
+			gameOver("WHITE resigns.  BLACK wins.");
+		else
+			gameOver("BLACK resigns.  WHITE wins.");
+	}
+
+	public static void gameOver(String str) {
+		// The game ends.  The parameter, str, is displayed as a message
+		// to the user.  The states of the buttons are adjusted so players
+		// can start a new game.
+		label.setText(str);
+		newGame.setEnabled(true);
+		endGame.setEnabled(false);
+		playing = false;
+	}
+
+	public static void setLabel(String s) {
+		label.setText(s);
+	}
 
 }
 
@@ -168,8 +171,8 @@ class BoardGraphics extends JPanel implements ActionListener {
 	private static JButton[][] buttons = new JButton[8][8];
 	private static Move[] legalMoves;
 	private Scanner scan;
-	private int row;
-	private int col;
+	private static int row;
+	private static int col;
 
 	public BoardGraphics() {
 		setupGraphics();
@@ -192,16 +195,20 @@ class BoardGraphics extends JPanel implements ActionListener {
 
 		//draw buttons
 		drawButtons();
+
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				buttons[row][col].setBorderPainted(false);
+			}
+		}
 	}
 
 	public void createButtons() {
-
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				buttons[i][j] = new JButton();
 			}
 		}
-
 	}
 
 	public void setBackground() {
@@ -238,9 +245,6 @@ class BoardGraphics extends JPanel implements ActionListener {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				buttons[i][j].setOpaque(true);
-				buttons[i][j].setBorderPainted(false);
-				buttons[i][j].setBorder(null);
-				buttons[i][j].setMargin(new Insets(0, 0, 0, 0));
 				if (Board.getPiece(i, j) == 1) {
 					buttons[i][j].setIcon(whitePawn);
 				}
@@ -259,9 +263,37 @@ class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
-	public static void drawBoard() {
-		
+
+	public static void drawBorder() {
+		if (row != Panel.getSelectedRow() && col != Panel.getSelectedCol()) {
+			for (int row = 0; row < 8; row++) {
+				for (int col = 0; col < 8; col++) {
+					buttons[row][col].setBorderPainted(true);
+					for (int i = 0; i < legalMoves.length; i++) {
+						if (row == legalMoves[i].fromRow && col == legalMoves[i].fromCol) {
+							buttons[row][col].setBorder(new LineBorder(Color.darkGray, 5));
+						}
+						else {
+							buttons[row][col].setBorder(null);
+						}
+					}
+				}
+			}
+		}
+		else {
+			for (int row = 0; row < 8; row++) {
+				for (int col = 0; col < 8; col++) {
+					for (int i = 0; i < legalMoves.length; i++) {
+						if (row == legalMoves[i].toRow && col == legalMoves[i].toCol) {
+							buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(Color.darkGray, 5));
+						}
+						else {
+							buttons[row][col].setBorder(null);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void addButtons() {
@@ -289,20 +321,23 @@ class BoardGraphics extends JPanel implements ActionListener {
        might change a previous selection.)  Reset the message, in
        case it was previously displaying an error message. */
 
+		drawBorder();
 		for (int i = 0; i < legalMoves.length; i++)
 			if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
 				Panel.setSelectedRow(row);
 				Panel.setSelectedCol(col);;
-				if (Panel.getPlayer() == Board.WHITE)
-					 UserInterface.setLabel("WHITE:  Make your move.");
-				else
-					 UserInterface.setLabel("BLACK:  Make your move.");
+				if (Panel.getPlayer() == Board.WHITE) {
+					UserInterface.setLabel("WHITE:  Make your move.");
+				}
+				else {
+					UserInterface.setLabel("BLACK:  Make your move.");
+				}
 				return;
 			}
 
 		/* If no piece has been selected to be moved, the user must first
        select a piece.  Show an error message and return. */
-
+		drawBorder();
 		if (Panel.getSelectedRow() < 0) {
 			UserInterface.setLabel("Click the piece you want to move.");
 			return;
@@ -310,13 +345,13 @@ class BoardGraphics extends JPanel implements ActionListener {
 
 		/* If the user clicked on a square where the selected piece can be
        legally moved, then make the move and return. */
-
-		for (int i = 0; i < legalMoves.length; i++)
-			if (legalMoves[i].fromRow == Panel.getSelectedRow() && legalMoves[i].fromCol == Panel.getSelectedCol()
-			&& legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
+		drawBorder();
+		for (int i = 0; i < legalMoves.length; i++) {
+			if (legalMoves[i].fromRow == Panel.getSelectedRow() && legalMoves[i].fromCol == Panel.getSelectedCol() && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
 				doMakeMove(legalMoves[i]);
 				return;
 			}
+		}
 
 		/* If we get to this point, there is a piece selected, and the square where
        the user just clicked is not one where that piece can be legally moved.
@@ -343,13 +378,16 @@ class BoardGraphics extends JPanel implements ActionListener {
 		if (move.isJump()) {
 			legalMoves = Board.getLegalJumpsFrom(Panel.getPlayer(),move.toRow,move.toCol);
 			if (legalMoves != null) {
-				if (Panel.getPlayer() == Board.WHITE)
+				if (Panel.getPlayer() == Board.WHITE) {
 					UserInterface.setLabel("WHITE:  You must continue jumping.");
-				else
+				}
+				else {
 					UserInterface.setLabel("BLACK:  You must continue jumping.");
+				}
 				Panel.setSelectedRow(move.toRow);  // Since only one piece can be moved, select it.
 				Panel.setSelectedRow(move.toCol);
-				BoardGraphics.drawButtons();
+				drawButtons();
+				drawBorder();
 				return;
 			}
 		}
@@ -361,6 +399,7 @@ class BoardGraphics extends JPanel implements ActionListener {
 		if (Panel.getPlayer() == Board.WHITE) {
 			Panel.setPlayer(Board.BLACK);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
+			drawBorder();
 			if (legalMoves == null) {
 				UserInterface.gameOver("BLACK has no moves.  WHITE wins.");
 			}
@@ -374,6 +413,7 @@ class BoardGraphics extends JPanel implements ActionListener {
 		else {
 			Panel.setPlayer(Board.WHITE);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
+			drawBorder();
 			if (legalMoves == null) {
 				UserInterface.gameOver("WHITE has no moves.  BLACK wins.");
 			}
@@ -390,10 +430,11 @@ class BoardGraphics extends JPanel implements ActionListener {
 
 		Panel.setSelectedRow(-1);
 
-		BoardGraphics.drawButtons();
+		drawButtons();
+		drawBorder();
 
 	}  // end doMakeMove();
-	
+
 	public static void setLegalMoves(Move[] moves) {
 		legalMoves = moves;
 	}

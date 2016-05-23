@@ -12,9 +12,9 @@ public class Board {
 	BLACK_KING = 4;
 
 	private static int[][] board = new int[8][8]; //Create a 2-Dimensional array of all the pieces on the board.
-	
+
 	public static void setupBoard() {
-		
+
 		//Set the corresponding spaces to the values of the piece at that position.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -31,7 +31,7 @@ public class Board {
 				}
 			}
 		}
-		
+
 	}
 
 	public static int getPiece(int row, int col) {
@@ -53,6 +53,7 @@ public class Board {
 		//This method takes care of the logic to move a piece. 
 		//If the move is a jump, the jumped piece will be removed.
 		//If the move results in the piece becoming a king, the piece is set to a king.
+
 		board[toRow][toCol] = board[fromRow][fromCol];
 		board[fromRow][fromCol] = EMPTY;
 		if (fromRow - toRow == 2 || fromRow - toRow == -2) {
@@ -60,10 +61,12 @@ public class Board {
 			int jumpCol = (fromCol + toCol) / 2;
 			board[jumpRow][jumpCol] = EMPTY;
 		}
-		if (toRow == 0 && board[toRow][toCol] == WHITE)
+		if (toRow == 0 && board[toRow][toCol] == WHITE) {
 			board[toRow][toCol] = WHITE_KING;
-		if (toRow == 7 && board[toRow][toCol] == BLACK)
+		}
+		if (toRow == 7 && board[toRow][toCol] == BLACK) {
 			board[toRow][toCol] = BLACK_KING;
+		}
 	}   
 
 
@@ -73,14 +76,17 @@ public class Board {
 		//Since a player must jump if they are able to, the legal moves will be
 		//either all jumps or all regular moves.
 
-		if (player != WHITE && player != BLACK)
+		if (player != WHITE && player != BLACK) {
 			return null;
+		}
 
 		int playerKing;
-		if (player == WHITE)
+		if (player == WHITE) {
 			playerKing = WHITE_KING;
-		else
+		}
+		else {
 			playerKing = BLACK_KING;
+		}
 
 		Vector<Move> moves = new Vector<Move>();
 
@@ -90,14 +96,18 @@ public class Board {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if (board[row][col] == player || board[row][col] == playerKing) {
-					if (canJump(player, row, col, row+1, col+1, row+2, col+2))
+					if (canJump(player, row, col, row+1, col+1, row+2, col+2)) {
 						moves.addElement(new Move(row, col, row+2, col+2));
-					if (canJump(player, row, col, row-1, col+1, row-2, col+2))
+					}
+					if (canJump(player, row, col, row-1, col+1, row-2, col+2)) {
 						moves.addElement(new Move(row, col, row-2, col+2));
-					if (canJump(player, row, col, row+1, col-1, row+2, col-2))
+					}
+					if (canJump(player, row, col, row+1, col-1, row+2, col-2)) {
 						moves.addElement(new Move(row, col, row+2, col-2));
-					if (canJump(player, row, col, row-1, col-1, row-2, col-2))
+					}
+					if (canJump(player, row, col, row-1, col-1, row-2, col-2)) {
 						moves.addElement(new Move(row, col, row-2, col-2));
+					}
 				}
 			}
 		}
@@ -109,14 +119,18 @@ public class Board {
 			for (int row = 0; row < 8; row++) {
 				for (int col = 0; col < 8; col++) {
 					if (board[row][col] == player || board[row][col] == playerKing) {
-						if (canMove(player,row,col,row+1,col+1))
+						if (canMove(player,row,col,row+1,col+1)) {
 							moves.addElement(new Move(row,col,row+1,col+1));
-						if (canMove(player,row,col,row-1,col+1))
+						}
+						if (canMove(player,row,col,row-1,col+1)) {
 							moves.addElement(new Move(row,col,row-1,col+1));
-						if (canMove(player,row,col,row+1,col-1))
+						}
+						if (canMove(player,row,col,row+1,col-1)) {
 							moves.addElement(new Move(row,col,row+1,col-1));
-						if (canMove(player,row,col,row-1,col-1))
+						}
+						if (canMove(player,row,col,row-1,col-1)) {
 							moves.addElement(new Move(row,col,row-1,col-1));
+						}
 					}
 				}
 			}
@@ -125,12 +139,14 @@ public class Board {
 		//If not legal moves are found, we return null, otherwise we
 		//create an array large enough to hold all of the legal moves.
 
-		if (moves.size() == 0)
+		if (moves.size() == 0) {
 			return null;
+		}
 		else {
 			Move[] moveArray = new Move[moves.size()];
-			for (int i = 0; i < moves.size(); i++)
+			for (int i = 0; i < moves.size(); i++) {
 				moveArray[i] = moves.elementAt(i);
+			}
 			return moveArray;
 		}
 
@@ -142,30 +158,40 @@ public class Board {
 		// make starting from the specified row and column.  If no such
 		// jumps are possible, null is returned.  The logic is similar
 		// to the logic of the getLegalMoves() method.
-		if (player != WHITE && player != BLACK)
+		if (player != WHITE && player != BLACK) {
 			return null;
+		}
+
 		int playerKing;  // The constant representing a King belonging to player.
-		if (player == WHITE)
+		if (player == WHITE) {
 			playerKing = WHITE_KING;
-		else
+		}
+		else {
 			playerKing = BLACK_KING;
+		}
 		Vector<Move> moves = new Vector<Move>();  // The legal jumps will be stored in this vector.
 		if (board[row][col] == player || board[row][col] == playerKing) {
-			if (canJump(player, row, col, row+1, col+1, row+2, col+2))
+			if (canJump(player, row, col, row+1, col+1, row+2, col+2)) {
 				moves.addElement(new Move(row, col, row+2, col+2));
-			if (canJump(player, row, col, row-1, col+1, row-2, col+2))
+			}
+			if (canJump(player, row, col, row-1, col+1, row-2, col+2)) {
 				moves.addElement(new Move(row, col, row-2, col+2));
-			if (canJump(player, row, col, row+1, col-1, row+2, col-2))
+			}
+			if (canJump(player, row, col, row+1, col-1, row+2, col-2)) {
 				moves.addElement(new Move(row, col, row+2, col-2));
-			if (canJump(player, row, col, row-1, col-1, row-2, col-2))
+			}
+			if (canJump(player, row, col, row-1, col-1, row-2, col-2)) {
 				moves.addElement(new Move(row, col, row-2, col-2));
+			}
 		}
-		if (moves.size() == 0)
+		if (moves.size() == 0) {
 			return null;
+		}
 		else {
 			Move[] moveArray = new Move[moves.size()];
-			for (int i = 0; i < moves.size(); i++)
+			for (int i = 0; i < moves.size(); i++) {
 				moveArray[i] = moves.elementAt(i);
+			}
 			return moveArray;
 		}
 	}  // end getLegalMovesFrom()
@@ -178,24 +204,28 @@ public class Board {
 		// that is 2 rows and 2 columns distant from (r1,c1) and that 
 		// (r2,c2) is the square between (r1,c1) and (r3,c3).
 
-		if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8)
+		if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8) {
 			return false;  // (r3,c3) is off the board.
-
-		if (board[r3][c3] != EMPTY)
+		}
+		if (board[r3][c3] != EMPTY) {
 			return false;  // (r3,c3) already contains a piece.
-
+		}
 		if (player == WHITE) {
-			if (board[r1][c1] == WHITE && r3 > r1)
+			if (board[r1][c1] == WHITE && r3 > r1) {
 				return false;  // Regular white piece can only move  up.
-			if (board[r2][c2] != BLACK && board[r2][c2] != BLACK_KING)
+			}
+			if (board[r2][c2] != BLACK && board[r2][c2] != BLACK_KING) {
 				return false;  // There is no black piece to jump.
+			}
 			return true;  // The jump is legal.
 		}
 		else {
-			if (board[r1][c1] == BLACK && r3 < r1)
+			if (board[r1][c1] == BLACK && r3 < r1) {
 				return false;  // Regular black piece can only move down.
-			if (board[r2][c2] != WHITE && board[r2][c2] != WHITE_KING)
+			}
+			if (board[r2][c2] != WHITE && board[r2][c2] != WHITE_KING) {
 				return false;  // There is no white piece to jump.
+			}
 			return true;  // The jump is legal.
 		}
 
@@ -208,20 +238,22 @@ public class Board {
 		// assumed that (r1,r2) contains one of the player's pieces and
 		// that (r2,c2) is a neighboring square.
 
-		if (r2 < 0 || r2 >= 8 || c2 < 0 || c2 >= 8)
+		if (r2 < 0 || r2 >= 8 || c2 < 0 || c2 >= 8) {
 			return false;  // (r2,c2) is off the board.
-
-		if (board[r2][c2] != EMPTY)
+		}
+		if (board[r2][c2] != EMPTY) {
 			return false;  // (r2,c2) already contains a piece.
-
+		}
 		if (player == WHITE) {
-			if (board[r1][c1] == WHITE && r2 > r1)
+			if (board[r1][c1] == WHITE && r2 > r1) {
 				return false;  // Regular white piece can only move down.
+			}
 			return true;  // The move is legal.
 		}
 		else {
-			if (board[r1][c1] == BLACK && r2 < r1)
+			if (board[r1][c1] == BLACK && r2 < r1) {
 				return false;  // Regular black piece can only move up.
+			}
 			return true;  // The move is legal.
 		}
 
