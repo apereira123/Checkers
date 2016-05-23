@@ -1,42 +1,242 @@
 package edu.exeter.cs;
 
+import java.util.Vector;
+
 public class Board {
 
-	private static int[][] board = new int[8][8];
-	private static final int EMPTY = 0;
-	private static final int BLACK_PAWN = 1;
-	private static final int WHITE_PAWN = 2;
-	//private static final int BLACK_KING = 3;
-	//private static final int WHITE_KING = 4;
-	
-	public static void resetBoard() {
-		
-		for (int i = 0; i < 3 ; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (i%2 == 0 && j%2 == 0 || i%2 == 1 && j%2 == 1) {
-					board[i][j] = BLACK_PAWN;
-				} else {
-					board[i][j] = EMPTY;
+	public static final int 
+	EMPTY = 0,
+	WHITE = 1,
+	BLACK = 2,
+	WHITE_KING = 3,
+	BLACK_KING = 4;
+
+	private static int[][] board;
+
+	public static void setupBoard() {
+		board = new int[8][8];
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if ( row % 2 == col % 2 ) {
+					if (row < 3)
+						board[row][col] = BLACK;
+					else if (row > 4)
+						board[row][col] = WHITE;
+					else
+						board[row][col] = EMPTY;
+				}
+				else {
+					board[row][col] = EMPTY;
 				}
 			}
 		}
-		for (int i = 5; i < 8 ; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (i%2 == 0 && j%2 == 0 || i%2 == 1 && j%2 == 1) {
-					board[i][j] = WHITE_PAWN;
-				} else {
-					board[i][j] = EMPTY;
+	}
+
+	public static int getPiece(int row, int col) {
+		return board[row][col];
+	}
+
+	public static void setPiece(int row, int col, int rank) {
+		board[row][col] = rank;
+	}
+
+	public static void makeMove(Move move) {
+		// Make the specified move.  It is assumed that move
+		// is non-null and that the move it represents is legal.
+		makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
+	}   
+
+	public static void makeMove(int fromRow, int fromCol, int toRow, int toCol) {
+		// Make the move from (fromRow,fromCol) to (toRow,toCol).  It is
+		// assumed that this move is legal.  If the move is a jump, the
+		// jumped piece is removed from the board.  If a piece moves
+		// the last row on the opponent's side of the board, the 
+		// piece becomes a king.
+		board[toRow][toCol] = board[fromRow][fromCol];
+		board[fromRow][fromCol] = EMPTY;
+		if (fromRow - toRow == 2 || fromRow - toRow == -2) {
+			// The move is a jump.  Remove the jumped piece from the board.
+			int jumpRow = (fromRow + toRow) / 2;  // Row of the jumped piece.
+			int jumpCol = (fromCol + toCol) / 2;  // Column of the jumped piece.
+			board[jumpRow][jumpCol] = EMPTY;
+		}
+		if (toRow == 0 && board[toRow][toCol] == WHITE)
+			board[toRow][toCol] = WHITE_KING;
+		if (toRow == 7 && board[toRow][toCol] == BLACK)
+			board[toRow][toCol] = BLACK_KING;
+	}   
+
+
+	public static Move[] getLegalMoves(int player) {
+		// Return an array containing all the legal CheckersMoves
+		// for the specified player on the current board.  If the player
+		// has no legal moves, null is returned.  The value of player
+		// should be one of the constants RED or BLACK; if not, null
+		// is returned.  If the returned value is non-null, it consists
+		// entirely of jump moves or entirely of regular moves, since
+		// if the player can jump, only jumps are legal moves.
+
+		if (player != WHITE && player != BLACK)
+			return null;
+
+		int playerKing;  // The constant representing a King belonging to player.
+		if (player == WHITE)
+			playerKing = WHITE_KING;
+		else
+			playerKing = BLACK_KING;
+
+		Vector<Move> moves = new Vector<Move>();  // Moves will be stored in this vector.
+
+		/*  First, check for any possible jumps.  Look at each square on the board.
+	          If that square contains one of the player's pieces, look at a possible
+	          jump in each of the four directions from that square.  If there is 
+	          a legal jump in that direction, put it in the moves vector.
+		 */
+
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (board[row][col] == player || board[row][col] == playerKing) {
+					if (canJump(player, row, col, row+1, col+1, row+2, col+2))
+						moves.addElement(new Move(row, col, row+2, col+2));
+					if (canJump(player, row, col, row-1, col+1, row-2, col+2))
+						moves.addElement(new Move(row, col, row-2, col+2));
+					if (canJump(player, row, col, row+1, col-1, row+2, col-2))
+						moves.addElement(new Move(row, col, row+2, col-2));
+					if (canJump(player, row, col, row-1, col-1, row-2, col-2))
+						moves.addElement(new Move(row, col, row-2, col-2));
 				}
 			}
 		}
+
+		/*  If any jump moves were found, then the user must jump, so we don't 
+	          add any regular moves.  However, if no jumps were found, check for
+	          any legal regular moves.  Look at each square on the board.
+	          If that square contains one of the player's pieces, look at a possible
+	          move in each of the four directions from that square.  If there is 
+	          a legal move in that direction, put it in the moves vector.
+		 */
+
+		if (moves.size() == 0) {
+			for (int row = 0; row < 8; row++) {
+				for (int col = 0; col < 8; col++) {
+					if (board[row][col] == player || board[row][col] == playerKing) {
+						if (canMove(player,row,col,row+1,col+1))
+							moves.addElement(new Move(row,col,row+1,col+1));
+						if (canMove(player,row,col,row-1,col+1))
+							moves.addElement(new Move(row,col,row-1,col+1));
+						if (canMove(player,row,col,row+1,col-1))
+							moves.addElement(new Move(row,col,row+1,col-1));
+						if (canMove(player,row,col,row-1,col-1))
+							moves.addElement(new Move(row,col,row-1,col-1));
+					}
+				}
+			}
+		}
+
+		/* If no legal moves have been found, return null.  Otherwise, create
+	         an array just big enough to hold all the legal moves, copy the
+	         legal moves from the vector into the array, and return the array. */
+
+		if (moves.size() == 0)
+			return null;
+		else {
+			Move[] moveArray = new Move[moves.size()];
+			for (int i = 0; i < moves.size(); i++)
+				moveArray[i] = moves.elementAt(i);
+			return moveArray;
+		}
+
+	}  // end getLegalMoves
+
+
+	public static Move[] getLegalJumpsFrom(int player, int row, int col) {
+		// Return a list of the legal jumps that the specified player can
+		// make starting from the specified row and column.  If no such
+		// jumps are possible, null is returned.  The logic is similar
+		// to the logic of the getLegalMoves() method.
+		if (player != WHITE && player != BLACK)
+			return null;
+		int playerKing;  // The constant representing a King belonging to player.
+		if (player == WHITE)
+			playerKing = WHITE_KING;
+		else
+			playerKing = BLACK_KING;
+		Vector<Move> moves = new Vector<Move>();  // The legal jumps will be stored in this vector.
+		if (board[row][col] == player || board[row][col] == playerKing) {
+			if (canJump(player, row, col, row+1, col+1, row+2, col+2))
+				moves.addElement(new Move(row, col, row+2, col+2));
+			if (canJump(player, row, col, row-1, col+1, row-2, col+2))
+				moves.addElement(new Move(row, col, row-2, col+2));
+			if (canJump(player, row, col, row+1, col-1, row+2, col-2))
+				moves.addElement(new Move(row, col, row+2, col-2));
+			if (canJump(player, row, col, row-1, col-1, row-2, col-2))
+				moves.addElement(new Move(row, col, row-2, col-2));
+		}
+		if (moves.size() == 0)
+			return null;
+		else {
+			Move[] moveArray = new Move[moves.size()];
+			for (int i = 0; i < moves.size(); i++)
+				moveArray[i] = moves.elementAt(i);
+			return moveArray;
+		}
+	}  // end getLegalMovesFrom()
+
+
+	private static boolean canJump(int player, int r1, int c1, int r2, int c2, int r3, int c3) {
+		// This is called by the two previous methods to check whether the
+		// player can legally jump from (r1,c1) to (r3,c3).  It is assumed
+		// that the player has a piece at (r1,c1), that (r3,c3) is a position
+		// that is 2 rows and 2 columns distant from (r1,c1) and that 
+		// (r2,c2) is the square between (r1,c1) and (r3,c3).
+
+		if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8)
+			return false;  // (r3,c3) is off the board.
+
+		if (board[r3][c3] != EMPTY)
+			return false;  // (r3,c3) already contains a piece.
+
+		if (player == WHITE) {
+			if (board[r1][c1] == WHITE && r3 > r1)
+				return false;  // Regular red piece can only move  up.
+			if (board[r2][c2] != BLACK && board[r2][c2] != BLACK_KING)
+				return false;  // There is no black piece to jump.
+			return true;  // The jump is legal.
+		}
+		else {
+			if (board[r1][c1] == BLACK && r3 < r1)
+				return false;  // Regular black piece can only move down.
+			if (board[r2][c2] != WHITE && board[r2][c2] != WHITE_KING)
+				return false;  // There is no red piece to jump.
+			return true;  // The jump is legal.
+		}
+
+	}  // end canJump()
+
+
+	private static boolean canMove(int player, int r1, int c1, int r2, int c2) {
+		// This is called by the getLegalMoves() method to determine whether
+		// the player can legally move from (r1,c1) to (r2,c2).  It is
+		// assumed that (r1,r2) contains one of the player's pieces and
+		// that (r2,c2) is a neighboring square.
+
+		if (r2 < 0 || r2 >= 8 || c2 < 0 || c2 >= 8)
+			return false;  // (r2,c2) is off the board.
+
+		if (board[r2][c2] != EMPTY)
+			return false;  // (r2,c2) already contains a piece.
+
+		if (player == WHITE) {
+			if (board[r1][c1] == WHITE && r2 > r1)
+				return false;  // Regular red piece can only move down.
+			return true;  // The move is legal.
+		}
+		else {
+			if (board[r1][c1] == BLACK && r2 < r1)
+				return false;  // Regular black piece can only move up.
+			return true;  // The move is legal.
+		}
+
 	}
-	
-	public static int getPiece(int i, int j) {
-		return board[i][j];
-	}
-	
-	public static void setPiece(int i, int j, int n) {
-		board[i][j] = n;
-	}
-	
+
 }

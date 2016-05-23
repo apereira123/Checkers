@@ -11,18 +11,11 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		
-		BoardGraphics board = new BoardGraphics();
+		Panel board = new Panel();
 		
 		frame.getContentPane().add(board);
 		frame.pack();
 		frame.setVisible(true);
-		
-		//Sample code to test that the graphics will update
-		Thread.sleep(5000);
-		Board.setPiece(2, 0, 0);
-		Board.setPiece(3, 1, 1);
-		
-		board.drawButtons();
 
 	}
 
