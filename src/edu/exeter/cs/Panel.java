@@ -229,13 +229,13 @@ class BoardGraphics extends JPanel implements ActionListener {
 	}
 
 	public static void drawButtons() {
-		ImageIcon whitePawn = new ImageIcon("/resources/white_pawn.png");
+		ImageIcon whitePawn = new ImageIcon("resources/white_pawn.png");
 		whitePawn.setImage(whitePawn.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
-		ImageIcon blackPawn = new ImageIcon("/resources/black_pawn.png");
+		ImageIcon blackPawn = new ImageIcon("resources/black_pawn.png");
 		blackPawn.setImage(blackPawn.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
-		ImageIcon whiteKing = new ImageIcon("/resources/white_king.png");
+		ImageIcon whiteKing = new ImageIcon("resources/white_king.png");
 		whiteKing.setImage(whiteKing.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
-		ImageIcon blackKing = new ImageIcon("/resources/black_king.png");
+		ImageIcon blackKing = new ImageIcon("resources/black_king.png");
 		blackKing.setImage(blackKing.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
 
 		for (int i = 0; i < 8; i++) {
