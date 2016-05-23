@@ -63,7 +63,6 @@ class UserInterface extends JPanel implements ActionListener {
 	private JButton newGame;
 	private static JLabel label;
 	private JButton endGame;
-	
 	private boolean playing;
 	
 	public UserInterface() {
