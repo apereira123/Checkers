@@ -1,9 +1,15 @@
-package edu.exeter.cs;
+package checkers.ai;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+
+import edu.exeter.cs.Board;
+import edu.exeter.cs.Move;
+import edu.exeter.cs.Panel;
+import edu.exeter.cs.UserInterface;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
