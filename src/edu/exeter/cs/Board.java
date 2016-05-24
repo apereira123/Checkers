@@ -31,7 +31,7 @@ public class Board {
 			}
 		}
 	}
-	
+
 	public static void clearBoard() {
 		//Set the corresponding spaces to the values of the piece at that position.
 		for (int row = 0; row < 8; row++) {

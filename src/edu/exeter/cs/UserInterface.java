@@ -110,5 +110,5 @@ public class UserInterface extends JPanel implements ActionListener {
 	public static void setLabel(String s) {
 		label.setText(s);
 	}
-	
+
 }

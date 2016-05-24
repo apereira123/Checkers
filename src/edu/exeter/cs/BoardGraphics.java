@@ -69,7 +69,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
+
 	public void addButtons() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -109,7 +109,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
+
 	public static void setBorderPaintedFalse() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -117,7 +117,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
+
 	public static void setBorderPaintedTrue() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -156,9 +156,9 @@ public class BoardGraphics extends JPanel implements ActionListener {
        can move, mark this row and col as selected and return.  (This
        might change a previous selection.)  Reset the message, in
        case it was previously displaying an error message. */
-		
+
 		setBorders();
-		
+
 		for (int i = 0; i < legalMoves.length; i++)
 			if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
 				Panel.setSelectedRow(row);
@@ -182,10 +182,10 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 		/* If the user clicked on a square where the selected piece can be
        legally moved, then make the move and return. */
-		
-		
+
+
 		setBorders();
-		
+
 		for (int i = 0; i < legalMoves.length; i++) {
 			if (legalMoves[i].fromRow == Panel.getSelectedRow() && legalMoves[i].fromCol == Panel.getSelectedCol() && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
 				doMakeMove(legalMoves[i]);
@@ -270,5 +270,5 @@ public class BoardGraphics extends JPanel implements ActionListener {
 	public static void setLegalMoves(Move[] moves) {
 		legalMoves = moves;
 	}
-	
+
 }
