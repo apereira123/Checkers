@@ -4,13 +4,14 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 @SuppressWarnings("serial")
 public class BoardGraphics extends JPanel implements ActionListener {
 
 	private static JButton[][] buttons = new JButton[8][8];
-	private static Move[] legalMoves;
+	private static ArrayList<Move> legalMoves;
 	private Scanner scan;
 	private static int row;
 	private static int col;
@@ -130,14 +131,14 @@ public class BoardGraphics extends JPanel implements ActionListener {
 	public static void setBorders() {
 		setBorderPaintedTrue();
 		if (Panel.selectedRow == -1) {
-			for (int i = 0; i < legalMoves.length; i++) {
-				buttons[legalMoves[i].fromRow][legalMoves[i].fromCol].setBorder(new LineBorder(new Color(0, 128, 255), 5));
+			for (int i = 0; i < legalMoves.size(); i++) {
+				buttons[legalMoves.get(i).fromRow][legalMoves.get(i).fromCol].setBorder(new LineBorder(new Color(0, 128, 255), 5));
 			} 
 		}
 		else {
-			for (int i = 0; i < legalMoves.length; i++) {
-				if (Panel.getSelectedRow() == legalMoves[i].fromRow && Panel.getSelectedCol() == legalMoves[i].fromCol) {
-					buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(new Color(0, 128, 255), 5));
+			for (int i = 0; i < legalMoves.size(); i++) {
+				if (Panel.getSelectedRow() == legalMoves.get(i).fromRow && Panel.getSelectedCol() == legalMoves.get(i).fromCol) {
+					buttons[legalMoves.get(i).toRow][legalMoves.get(i).toCol].setBorder(new LineBorder(new Color(0, 128, 255), 5));
 				}
 			} 
 		}
@@ -167,8 +168,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		
 		setBorders();
 
-		for (int i = 0; i < legalMoves.length; i++)
-			if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
+		for (int i = 0; i < legalMoves.size(); i++)
+			if (legalMoves.get(i).fromRow == row && legalMoves.get(i).fromCol == col) {
 				Panel.setSelectedRow(row);
 				Panel.setSelectedCol(col);;
 				if (Panel.getPlayer() == Board.WHITE) {
@@ -194,9 +195,9 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 		setBorders();
 
-		for (int i = 0; i < legalMoves.length; i++) {
-			if (legalMoves[i].fromRow == Panel.getSelectedRow() && legalMoves[i].fromCol == Panel.getSelectedCol() && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
-				doMakeMove(legalMoves[i]);
+		for (int i = 0; i < legalMoves.size(); i++) {
+			if (legalMoves.get(i).fromRow == Panel.getSelectedRow() && legalMoves.get(i).fromCol == Panel.getSelectedCol() && legalMoves.get(i).toRow == row && legalMoves.get(i).toCol == col) {
+				doMakeMove(legalMoves.get(i));
 				return;
 			}
 		}
@@ -275,7 +276,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 	}  // end doMakeMove();
 
-	public static void setLegalMoves(Move[] moves) {
+	public static void setLegalMoves(ArrayList<Move> moves) {
 		legalMoves = moves;
 	}
 

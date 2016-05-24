@@ -2,10 +2,11 @@ package edu.exeter.cs;
 
 public class Move {
 
-	int fromRow, fromCol, toRow, toCol;
+	//Declare variables which store the necessary information for a move.
+	public int fromRow, fromCol, toRow, toCol;
 
 	public Move(int r1, int c1, int r2, int c2) {
-		//Constructs a move.
+		//Construct a move.
 		fromRow = r1;
 		fromCol = c1;
 		toRow = r2;
@@ -13,7 +14,7 @@ public class Move {
 	}
 
 	public boolean isJump() {
-		//Assuming the move is legal, this method returns true if the move is a jump.
+		//If the move is legal, return true if the move is a jump.
 		return (fromRow - toRow == 2 || fromRow - toRow == -2);
 	}
 

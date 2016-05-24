@@ -4,26 +4,31 @@ import java.util.ArrayList;
 
 public class Board {
 
-	public static final int //Create constants to refer to the pieces in the array.
+	//Create constants to refer to the pieces in the array.
+	public static final int
 	EMPTY = 0,
 	WHITE = 1,
 	BLACK = 2,
 	WHITE_KING = 3,
 	BLACK_KING = 4;
 
-	private static int[][] board = new int[8][8]; //Create a 2-Dimensional array of all the pieces on the board.
+	//Create a 2-Dimensional array of all the pieces on the board.
+	private static int[][] board = new int[8][8];
 
 	public static void setupBoard() {
 		//Set the corresponding spaces to the values of the piece at that position.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if ( row % 2 == col % 2 ) {
-					if (row < 3)
+					if (row < 3) {
 						board[row][col] = BLACK;
-					else if (row > 4)
+					} 
+					else if (row > 4) {
 						board[row][col] = WHITE;
-					else
+					}
+					else {
 						board[row][col] = EMPTY;
+					}
 				}
 				else {
 					board[row][col] = EMPTY;
@@ -33,7 +38,7 @@ public class Board {
 	}
 
 	public static void clearBoard() {
-		//Set the corresponding spaces to the values of the piece at that position.
+		//Set the entire board to be empty.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				board[row][col] = EMPTY;
@@ -52,40 +57,29 @@ public class Board {
 	}
 
 	public static void makeMove(Move move) {
-		//Assuming the move is a legal move, this will make the specified move.
-		makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
-	}   
-
-	public static void makeMove(int fromRow, int fromCol, int toRow, int toCol) {
+		//If the move is legal, this will make the specified move.
 		//This method takes care of the logic to move a piece. 
 		//If the move is a jump, the jumped piece will be removed.
 		//If the move results in the piece becoming a king, the piece is set to a king.
-
-		board[toRow][toCol] = board[fromRow][fromCol];
-		board[fromRow][fromCol] = EMPTY;
-		if (fromRow - toRow == 2 || fromRow - toRow == -2) {
-			int jumpRow = (fromRow + toRow) / 2;
-			int jumpCol = (fromCol + toCol) / 2;
+		
+		board[move.toRow][move.toCol] = board[move.fromRow][move.fromCol];
+		board[move.fromRow][move.fromCol] = EMPTY;
+		if (move.isJump()) {
+			int jumpRow = (move.fromRow + move.toRow) / 2;
+			int jumpCol = (move.fromCol + move.toCol) / 2;
 			board[jumpRow][jumpCol] = EMPTY;
 		}
-		if (toRow == 0 && board[toRow][toCol] == WHITE) {
-			board[toRow][toCol] = WHITE_KING;
+		if (move.toRow == 0 && board[move.toRow][move.toCol] == WHITE) {
+			board[move.toRow][move.toCol] = WHITE_KING;
 		}
-		if (toRow == 7 && board[toRow][toCol] == BLACK) {
-			board[toRow][toCol] = BLACK_KING;
+		if (move.toRow == 7 && board[move.toRow][move.toCol] == BLACK) {
+			board[move.toRow][move.toCol] = BLACK_KING;
 		}
-	}   
+	}      
 
-
-	public static Move[] getLegalMoves(int player) {
+	public static ArrayList<Move> getLegalMoves(int player) {
 		//Returns an array with all the legal moves for the player on the board.
 		//If there are no legal moves the method returns null.
-		//Since a player must jump if they are able to, the legal moves will be
-		//either all jumps or all regular moves.
-
-		if (player != WHITE && player != BLACK) {
-			return null;
-		}
 
 		int playerKing;
 		if (player == WHITE) {
@@ -140,31 +134,24 @@ public class Board {
 			}
 		}
 
-		//If not legal moves are found, we return null, otherwise we
+		//If no legal moves are found, we return null, otherwise we
 		//create an array large enough to hold all of the legal moves.
 
 		if (moves.size() == 0) {
 			return null;
 		}
 		else {
-			Move[] moveArray = new Move[moves.size()];
-			for (int i = 0; i < moves.size(); i++) {
-				moveArray[i] = moves.get(i);
-			}
-			return moveArray;
+			return moves;
 		}
 
 	}
 
 
-	public static Move[] getLegalJumpsFrom(int player, int row, int col) {
+	public static ArrayList<Move> getLegalJumpsFrom(int player, int row, int col) {
 		// Return a list of the legal jumps that the specified player can
 		// make starting from the specified row and column.  If no such
 		// jumps are possible, null is returned.  The logic is similar
 		// to the logic of the getLegalMoves() method.
-		if (player != WHITE && player != BLACK) {
-			return null;
-		}
 
 		int playerKing;  // The constant representing a King belonging to player.
 		if (player == WHITE) {
@@ -173,7 +160,9 @@ public class Board {
 		else {
 			playerKing = BLACK_KING;
 		}
+		
 		ArrayList<Move> moves = new ArrayList<Move>();  // The legal jumps will be stored in this vector.
+		
 		if (board[row][col] == player || board[row][col] == playerKing) {
 			if (canJump(player, row, col, row+1, col+1, row+2, col+2)) {
 				moves.add(new Move(row, col, row+2, col+2));
@@ -188,16 +177,14 @@ public class Board {
 				moves.add(new Move(row, col, row-2, col-2));
 			}
 		}
+		
 		if (moves.size() == 0) {
 			return null;
 		}
 		else {
-			Move[] moveArray = new Move[moves.size()];
-			for (int i = 0; i < moves.size(); i++) {
-				moveArray[i] = moves.get(i);
-			}
-			return moveArray;
+			return moves;
 		}
+		
 	}  // end getLegalJumpsFrom()
 
 
