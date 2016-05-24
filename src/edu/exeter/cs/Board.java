@@ -1,6 +1,6 @@
 package edu.exeter.cs;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class Board {
 
@@ -95,7 +95,7 @@ public class Board {
 			playerKing = BLACK_KING;
 		}
 
-		Vector<Move> moves = new Vector<Move>();
+		ArrayList<Move> moves = new ArrayList<Move>();
 
 		//Here we check for jumps first. If there are any legal jumps in
 		//any of the four directions of travel the move is added to the vector.
@@ -104,16 +104,16 @@ public class Board {
 			for (int col = 0; col < 8; col++) {
 				if (board[row][col] == player || board[row][col] == playerKing) {
 					if (canJump(player, row, col, row+1, col+1, row+2, col+2)) {
-						moves.addElement(new Move(row, col, row+2, col+2));
+						moves.add(new Move(row, col, row+2, col+2));
 					}
 					if (canJump(player, row, col, row-1, col+1, row-2, col+2)) {
-						moves.addElement(new Move(row, col, row-2, col+2));
+						moves.add(new Move(row, col, row-2, col+2));
 					}
 					if (canJump(player, row, col, row+1, col-1, row+2, col-2)) {
-						moves.addElement(new Move(row, col, row+2, col-2));
+						moves.add(new Move(row, col, row+2, col-2));
 					}
 					if (canJump(player, row, col, row-1, col-1, row-2, col-2)) {
-						moves.addElement(new Move(row, col, row-2, col-2));
+						moves.add(new Move(row, col, row-2, col-2));
 					}
 				}
 			}
@@ -125,16 +125,16 @@ public class Board {
 			for (int col = 0; col < 8; col++) {
 				if (board[row][col] == player || board[row][col] == playerKing) {
 					if (canMove(player,row,col,row+1,col+1)) {
-						moves.addElement(new Move(row,col,row+1,col+1));
+						moves.add(new Move(row,col,row+1,col+1));
 					}
 					if (canMove(player,row,col,row-1,col+1)) {
-						moves.addElement(new Move(row,col,row-1,col+1));
+						moves.add(new Move(row,col,row-1,col+1));
 					}
 					if (canMove(player,row,col,row+1,col-1)) {
-						moves.addElement(new Move(row,col,row+1,col-1));
+						moves.add(new Move(row,col,row+1,col-1));
 					}
 					if (canMove(player,row,col,row-1,col-1)) {
-						moves.addElement(new Move(row,col,row-1,col-1));
+						moves.add(new Move(row,col,row-1,col-1));
 					}
 				}
 			}
@@ -149,7 +149,7 @@ public class Board {
 		else {
 			Move[] moveArray = new Move[moves.size()];
 			for (int i = 0; i < moves.size(); i++) {
-				moveArray[i] = moves.elementAt(i);
+				moveArray[i] = moves.get(i);
 			}
 			return moveArray;
 		}
@@ -173,19 +173,19 @@ public class Board {
 		else {
 			playerKing = BLACK_KING;
 		}
-		Vector<Move> moves = new Vector<Move>();  // The legal jumps will be stored in this vector.
+		ArrayList<Move> moves = new ArrayList<Move>();  // The legal jumps will be stored in this vector.
 		if (board[row][col] == player || board[row][col] == playerKing) {
 			if (canJump(player, row, col, row+1, col+1, row+2, col+2)) {
-				moves.addElement(new Move(row, col, row+2, col+2));
+				moves.add(new Move(row, col, row+2, col+2));
 			}
 			if (canJump(player, row, col, row-1, col+1, row-2, col+2)) {
-				moves.addElement(new Move(row, col, row-2, col+2));
+				moves.add(new Move(row, col, row-2, col+2));
 			}
 			if (canJump(player, row, col, row+1, col-1, row+2, col-2)) {
-				moves.addElement(new Move(row, col, row+2, col-2));
+				moves.add(new Move(row, col, row+2, col-2));
 			}
 			if (canJump(player, row, col, row-1, col-1, row-2, col-2)) {
-				moves.addElement(new Move(row, col, row-2, col-2));
+				moves.add(new Move(row, col, row-2, col-2));
 			}
 		}
 		if (moves.size() == 0) {
@@ -194,7 +194,7 @@ public class Board {
 		else {
 			Move[] moveArray = new Move[moves.size()];
 			for (int i = 0; i < moves.size(); i++) {
-				moveArray[i] = moves.elementAt(i);
+				moveArray[i] = moves.get(i);
 			}
 			return moveArray;
 		}
