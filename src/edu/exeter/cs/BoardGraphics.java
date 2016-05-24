@@ -52,29 +52,29 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 	public void setBackground() {
 		String s;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (i%2 == 0 && j%2 == 0) {
-					s = i + " " + j;
-					buttons[i][j].setBackground(Color.lightGray);
-					buttons[i][j].addActionListener(this);
-					buttons[i][j].setActionCommand(s);
-				} else if (i%2 == 1 && j%2 == 1) {
-					s = i + " " + j;
-					buttons[i][j].setBackground(Color.lightGray);
-					buttons[i][j].addActionListener(this);
-					buttons[i][j].setActionCommand(s);
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (row%2 == 0 && col%2 == 0) {
+					s = row + " " + col;
+					buttons[row][col].setBackground(Color.lightGray);
+					buttons[row][col].addActionListener(this);
+					buttons[row][col].setActionCommand(s);
+				} else if (row%2 == 1 && col%2 == 1) {
+					s = row + " " + col;
+					buttons[row][col].setBackground(Color.lightGray);
+					buttons[row][col].addActionListener(this);
+					buttons[row][col].setActionCommand(s);
 				} else {
-					buttons[i][j].setBackground(Color.black);
+					buttons[row][col].setBackground(Color.black);
 				}
 			}
 		}
 	}
 
 	public void addButtons() {
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				add(buttons[i][j]);
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				add(buttons[row][col]);
 			}
 		}
 	}
@@ -89,23 +89,23 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		ImageIcon blackKing = new ImageIcon("resources/black_king.png");
 		blackKing.setImage(blackKing.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
 
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				buttons[i][j].setOpaque(true);
-				if (Board.getPiece(i, j) == 1) {
-					buttons[i][j].setIcon(whitePawn);
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				buttons[row][col].setOpaque(true);
+				if (Board.getPiece(row, col) == 1) {
+					buttons[row][col].setIcon(whitePawn);
 				}
-				else if (Board.getPiece(i, j) == 2) {
-					buttons[i][j].setIcon(blackPawn);
+				else if (Board.getPiece(row, col) == 2) {
+					buttons[row][col].setIcon(blackPawn);
 				}
-				else if (Board.getPiece(i, j) == 3) {
-					buttons[i][j].setIcon(whiteKing);
+				else if (Board.getPiece(row, col) == 3) {
+					buttons[row][col].setIcon(whiteKing);
 				}
-				else if (Board.getPiece(i, j) == 4) {
-					buttons[i][j].setIcon(blackKing);
+				else if (Board.getPiece(row, col) == 4) {
+					buttons[row][col].setIcon(blackKing);
 				} 
 				else {
-					buttons[i][j].setIcon(null);
+					buttons[row][col].setIcon(null);
 				}
 			}
 		}
@@ -173,10 +173,10 @@ public class BoardGraphics extends JPanel implements ActionListener {
 				Panel.setSelectedRow(row);
 				Panel.setSelectedCol(col);;
 				if (Panel.getPlayer() == Board.WHITE) {
-					UserInterface.setLabel("WHITE:  Make your move.");
+					UserInterface.setLabel("White: It's your turn to move.");
 				}
 				else {
-					UserInterface.setLabel("BLACK:  Make your move.");
+					UserInterface.setLabel("Black: It's your turn to move.");
 				}
 				setBorders();
 				return;
@@ -228,10 +228,10 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			legalMoves = Board.getLegalJumpsFrom(Panel.getPlayer(),move.toRow,move.toCol);
 			if (legalMoves != null) {
 				if (Panel.getPlayer() == Board.WHITE) {
-					UserInterface.setLabel("WHITE:  You must continue jumping.");
+					UserInterface.setLabel("White: You have to continue jumping.");
 				}
 				else {
-					UserInterface.setLabel("BLACK:  You must continue jumping.");
+					UserInterface.setLabel("Black: You have to continue jumping.");
 				}
 				Panel.setSelectedRow(move.toRow);  // Since only one piece can be moved, select it.
 				Panel.setSelectedCol(move.toCol);
@@ -249,20 +249,20 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			Panel.setPlayer(Board.BLACK);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
 			if (legalMoves == null) {
-				UserInterface.gameOver("BLACK has no moves.  WHITE wins.");
+				UserInterface.gameOver("Black cannot move. White wins.");
 			}
 			else {
-				UserInterface.setLabel("BLACK:  Make your move.");
+				UserInterface.setLabel("Black: It's your turn to move.");
 			}	
 		}
 		else {
 			Panel.setPlayer(Board.WHITE);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
 			if (legalMoves == null) {
-				UserInterface.gameOver("WHITE has no moves.  BLACK wins.");
+				UserInterface.gameOver("White cannot move. Black wins.");
 			}
 			else {
-				UserInterface.setLabel("WHITE:  Make your move.");
+				UserInterface.setLabel("White: It's your turn to move.");
 			}
 		}
 

@@ -7,20 +7,36 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class UserInterface extends JPanel implements ActionListener {
 
+	//Declare components which will be added to the UserInterface panel.
 	private static JButton newGame;
 	private static JLabel label;
 	private static JButton endGame;
 
+	//Construct UserInterface.
 	public UserInterface() {
+		//Set up the layout manager, dimensions, and color of the panel.
 		setLayout(new GridBagLayout());
 		setBackground(Color.gray);
 		setPreferredSize(new Dimension(700, 25));
 
+		//newGame allows users to start a new game. It is enabled by default.
 		newGame = new JButton("New Game");
 		newGame.addActionListener(this);
 		newGame.setActionCommand("newGame");
 		newGame.setEnabled(true);
 
+		//label is the interface between the computer and the user.
+		//Messages are displayed with this JLabel.
+		label = new JLabel("Welcome to Checkers", JLabel.CENTER);
+
+		//endGame allows users quit in the middle of a game.
+		//It is disabled until the user starts a new game.
+		endGame = new JButton("End Game");
+		endGame.addActionListener(this);
+		endGame.setActionCommand("endGame");
+		endGame.setEnabled(false);
+		
+		//Set constraints for newGame.
 		GridBagConstraints c1 = new GridBagConstraints();
 		c1.gridwidth = 2;
 		c1.gridheight = 1;
@@ -29,9 +45,7 @@ public class UserInterface extends JPanel implements ActionListener {
 		c1.weightx = 0.2;
 		c1.fill = GridBagConstraints.HORIZONTAL;
 
-
-		label = new JLabel("Welcome to Checkers", JLabel.CENTER);
-
+		//Set constraints for label.
 		GridBagConstraints c2 = new GridBagConstraints();
 		c2.gridwidth = 4;
 		c2.gridheight = 1;
@@ -39,12 +53,7 @@ public class UserInterface extends JPanel implements ActionListener {
 		c2.gridy = 0;
 		c2.weightx = 0.9;
 
-
-		endGame = new JButton("End Game");
-		endGame.addActionListener(this);
-		endGame.setActionCommand("endGame");
-		endGame.setEnabled(false);
-
+		//Set constraints for endGame.
 		GridBagConstraints c3 = new GridBagConstraints();
 		c3.gridwidth = 2;
 		c3.gridheight = 1;
@@ -53,57 +62,60 @@ public class UserInterface extends JPanel implements ActionListener {
 		c3.weightx = 0.2;
 		c3.fill = GridBagConstraints.HORIZONTAL;
 
+		//Add the components to UserInteface with their respective constraints.
 		add(newGame, c1);
 		add(label, c2);
 		add(endGame, c3);
 	}
 
+	//Action performed calls the method newGame() if newGame is pressed 
+	//and calls the method endGame() if endGame is pressed.
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "newGame") {
-			doNewGame();
+			newGame();
 		}
 		if (e.getActionCommand() == "endGame") {
-			doEndGame();
+			endGame();
 		}
 	}
 
-	void doNewGame() {
-		Board.setupBoard();   // Set up the pieces.
+	//newGame() sets up the board so the user can begin playing the game.
+	void newGame() {
+		Board.setupBoard();
 		BoardGraphics.setIcons();
-		Panel.setPlayer(Board.WHITE);;   // WHITE moves first.
-		BoardGraphics.setLegalMoves(Board.getLegalMoves(Board.WHITE));  // Get WHITE's legal moves.
-		Panel.setSelectedRow(-1);   // WHITE has not yet selected a piece to move.
+		Panel.setPlayer(Board.WHITE);
+		BoardGraphics.setLegalMoves(Board.getLegalMoves(Board.WHITE));
+		Panel.setSelectedRow(-1);   // White has not yet selected a piece to move.
 		BoardGraphics.setBorders();
-		label.setText("WHITE:  Make your move.");
+		label.setText("White: It's your turn to move.");
 		Panel.setPlaying(true);
 		newGame.setEnabled(false);
 		endGame.setEnabled(true);
 	}
 
-
-	void doEndGame() {
-		// Current player resigns.  Game ends.  Opponent wins.
+	//endGame() clears the board and calls gameOver().
+	void endGame() {
 		Board.clearBoard();
 		BoardGraphics.setIcons();
 		BoardGraphics.setBorderPaintedFalse();
 		if (Panel.getPlayer() == Board.WHITE) {
-			gameOver("WHITE resigns.  BLACK wins.");
+			gameOver("White quits.   Black wins.");
 		}
 		else {
-			gameOver("BLACK resigns.  WHITE wins.");
+			gameOver("Black quits.   White wins.");
 		}
 	}
 
+	//gameOver() ends the game, changes the label,
+	//and makes it so a user can begin a new game.
 	public static void gameOver(String str) {
-		// The game ends.  The parameter, str, is displayed as a message
-		// to the user.  The states of the buttons are adjusted so players
-		// can start a new game.
 		label.setText(str);
 		newGame.setEnabled(true);
 		endGame.setEnabled(false);
 		Panel.setPlaying(false);
 	}
 
+	//setLabel() allows the BoardGraphics class to change the label text.
 	public static void setLabel(String s) {
 		label.setText(s);
 	}
