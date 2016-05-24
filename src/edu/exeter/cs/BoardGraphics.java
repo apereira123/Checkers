@@ -34,12 +34,9 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 		//draw buttons
 		setIcons();
-
-		//set the border not to be painted
-		setBorderPaintedFalse();
 	}
 
-	
+	// Makes a new button at each coordinate in the array of buttons.
 	public void createButtons() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -48,7 +45,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
-	
+	// Creates the alternating color pattern of the checker board.
 	public void setBackground() {
 		String s;
 		for (int row = 0; row < 8; row++) {
@@ -56,13 +53,13 @@ public class BoardGraphics extends JPanel implements ActionListener {
 				if (row%2 == 0 && col%2 == 0) {
 					s = row + " " + col;
 					buttons[row][col].setBackground(Color.lightGray);
-					buttons[row][col].addActionListener(this);
-					buttons[row][col].setActionCommand(s);
+					buttons[row][col].addActionListener(this); // Add an action listener to legal spaces.
+					buttons[row][col].setActionCommand(s); // Set the action command to the coordinates of the button.
 				} else if (row%2 == 1 && col%2 == 1) {
 					s = row + " " + col;
 					buttons[row][col].setBackground(Color.lightGray);
-					buttons[row][col].addActionListener(this);
-					buttons[row][col].setActionCommand(s);
+					buttons[row][col].addActionListener(this); // Add an action listener to legal spaces.
+					buttons[row][col].setActionCommand(s); // Set the action command to the coordinates of the button.
 				} else {
 					buttons[row][col].setBackground(Color.black);
 				}
@@ -70,7 +67,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
-	
+	// Adds the buttons to the panel.
 	public void addButtons() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -79,7 +76,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
-	
+	// Every time a move is made, this method updates the button icons to reflect the move.
 	public static void setIcons() {
 		// Here we set the ImageIcons and scale them to the correct size for the board.
 		ImageIcon whitePawn = new ImageIcon("resources/white_pawn.png");
@@ -115,29 +112,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
-	// This methods makes setBorderPainted() false.
-	public static void setBorderPaintedFalse() {
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				buttons[row][col].setBorderPainted(false);
-			}
-		}
-	}
-
-	// This methods makes setBorderPainted() true.
-	public static void setBorderPaintedTrue() {
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				buttons[row][col].setBorderPainted(true);
-				buttons[row][col].setBorder(null);
-			}
-		}
-	}
-
 	// This method draws a border around legal moves.
 	public static void setBorders() {
-		setBorderPaintedTrue();
-		
 		// Here we highlight pieces that have legal moves.
 		if (Panel.selectedRow == -1) {
 			for (int i = 0; i < legalMoves.size(); i++) {
@@ -155,7 +131,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
-	// The actionPerformed() method looks for a button press
+	// The actionPerformed() method looks for a button press and
 	// sets row and col to the location of the button press.
 	public void actionPerformed(ActionEvent e) {
 		scan = new Scanner(e.getActionCommand());
@@ -167,10 +143,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		catch (Exception NullPointerException) {}
 	}
 
-	/* If the player clicked on one of the pieces that the player
-    * can move, mark this row and col as selected and return. (This
-    * might change a previous selection.) Reset the message, in
-    * case it was previously displaying an error message. */
+	// Clicks a square and calls doMakeMove().
 	void doClickSquare(int row, int col) {
 		// When a user starts, this will prompt them to start
 		// a new game if they click on the empty squares.
@@ -182,6 +155,9 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		// Highlight pieces which have legal moves.
 		setBorders();
 
+		/* If the player clicked on one of the pieces that the player
+		* can move, mark this row and col as selected and return. (This
+		* might change a previous selection.) Reset the message. */
 		for (int i = 0; i < legalMoves.size(); i++) {
 			if (legalMoves.get(i).fromRow == row && legalMoves.get(i).fromCol == col) {
 				Panel.setSelectedRow(row);
@@ -223,7 +199,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 	}
 
 	// This is called when the current player has chosen the specified move.
-	// Make the move, and then either end or continue the game appropriately.
+	// It makes the move, and then either ends or continues the game appropriately.
 	public void doMakeMove(Move move) {
 		// Make the move.
 		Board.makeMove(move);

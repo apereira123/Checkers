@@ -6,7 +6,7 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Panel extends JPanel {
 
-	//Create static variables which can be accessed by 
+	//Declare static variables which can be accessed by 
 	//both the BoardGraphics and UserInterface classes.
 	public static boolean playing;
 	public static int player;
