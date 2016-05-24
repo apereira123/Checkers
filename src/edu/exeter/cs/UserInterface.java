@@ -99,10 +99,10 @@ public class UserInterface extends JPanel implements ActionListener {
 		BoardGraphics.setIcons();
 		BoardGraphics.setBorderPaintedFalse();
 		if (Panel.getPlayer() == Board.WHITE) {
-			gameOver("White quits.   Black wins.");
+			gameOver("White quits. Black wins.");
 		}
 		else {
-			gameOver("Black quits.   White wins.");
+			gameOver("Black quits. White wins.");
 		}
 	}
 
