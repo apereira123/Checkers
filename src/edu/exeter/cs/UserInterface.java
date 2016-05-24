@@ -84,6 +84,9 @@ public class UserInterface extends JPanel implements ActionListener {
 
 	void doEndGame() {
 		// Current player resigns.  Game ends.  Opponent wins.
+		Board.clearBoard();
+		BoardGraphics.setIcons();
+		BoardGraphics.setBorderPaintedFalse();
 		if (playing == false) {
 			label.setText("There is no game in progress!");
 			return;

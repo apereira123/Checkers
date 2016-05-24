@@ -14,7 +14,6 @@ public class Board {
 	private static int[][] board = new int[8][8]; //Create a 2-Dimensional array of all the pieces on the board.
 
 	public static void setupBoard() {
-
 		//Set the corresponding spaces to the values of the piece at that position.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -31,7 +30,15 @@ public class Board {
 				}
 			}
 		}
-
+	}
+	
+	public static void clearBoard() {
+		//Set the corresponding spaces to the values of the piece at that position.
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				board[row][col] = EMPTY;
+			}
+		}
 	}
 
 	public static int getPiece(int row, int col) {
