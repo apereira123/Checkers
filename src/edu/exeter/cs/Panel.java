@@ -6,6 +6,7 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Panel extends JPanel {
 
+	public static boolean playing;
 	public static int player;
 	public static int selectedRow;
 	public static int selectedCol;
@@ -32,6 +33,13 @@ public class Panel extends JPanel {
 		add(board2, c2);
 	}
 
+	public static boolean isPlaying() {
+		return playing;
+	}
+	public static void setPlaying(boolean b) {
+		playing = b;
+	}
+	
 	public static int getPlayer() {
 		return player;
 	}

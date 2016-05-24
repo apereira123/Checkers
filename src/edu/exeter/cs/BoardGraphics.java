@@ -131,13 +131,13 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		setBorderPaintedTrue();
 		if (Panel.selectedRow == -1) {
 			for (int i = 0; i < legalMoves.length; i++) {
-				buttons[legalMoves[i].fromRow][legalMoves[i].fromCol].setBorder(new LineBorder(new Color(255, 255, 255), 5));
+				buttons[legalMoves[i].fromRow][legalMoves[i].fromCol].setBorder(new LineBorder(new Color(0, 128, 255), 5));
 			} 
 		}
 		else {
 			for (int i = 0; i < legalMoves.length; i++) {
 				if (Panel.getSelectedRow() == legalMoves[i].fromRow && Panel.getSelectedCol() == legalMoves[i].fromCol) {
-					buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(new Color(255, 255, 255), 5));
+					buttons[legalMoves[i].toRow][legalMoves[i].toCol].setBorder(new LineBorder(new Color(0, 128, 255), 5));
 				}
 			} 
 		}
@@ -147,7 +147,10 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		scan = new Scanner(e.getActionCommand());
 		row = scan.nextInt();
 		col = scan.nextInt();
-		doClickSquare(row, col);
+		try {
+			doClickSquare(row, col);
+		}
+		catch (Exception NullPointerException) {}
 	}
 
 	void doClickSquare(int row, int col) {
@@ -157,6 +160,11 @@ public class BoardGraphics extends JPanel implements ActionListener {
        might change a previous selection.)  Reset the message, in
        case it was previously displaying an error message. */
 
+		if (!Panel.isPlaying()) {
+			UserInterface.setLabel("Please start a new game.");
+			return;
+		}
+		
 		setBorders();
 
 		for (int i = 0; i < legalMoves.length; i++)

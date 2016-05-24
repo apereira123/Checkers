@@ -10,7 +10,6 @@ public class UserInterface extends JPanel implements ActionListener {
 	private static JButton newGame;
 	private static JLabel label;
 	private static JButton endGame;
-	private static boolean playing;
 
 	public UserInterface() {
 		setLayout(new GridBagLayout());
@@ -76,7 +75,7 @@ public class UserInterface extends JPanel implements ActionListener {
 		Panel.setSelectedRow(-1);   // WHITE has not yet selected a piece to move.
 		BoardGraphics.setBorders();
 		label.setText("WHITE:  Make your move.");
-		playing = true;
+		Panel.setPlaying(true);
 		newGame.setEnabled(false);
 		endGame.setEnabled(true);
 	}
@@ -87,14 +86,12 @@ public class UserInterface extends JPanel implements ActionListener {
 		Board.clearBoard();
 		BoardGraphics.setIcons();
 		BoardGraphics.setBorderPaintedFalse();
-		if (playing == false) {
-			label.setText("There is no game in progress!");
-			return;
-		}
-		if (Panel.getPlayer() == Board.WHITE)
+		if (Panel.getPlayer() == Board.WHITE) {
 			gameOver("WHITE resigns.  BLACK wins.");
-		else
+		}
+		else {
 			gameOver("BLACK resigns.  WHITE wins.");
+		}
 	}
 
 	public static void gameOver(String str) {
@@ -104,7 +101,7 @@ public class UserInterface extends JPanel implements ActionListener {
 		label.setText(str);
 		newGame.setEnabled(true);
 		endGame.setEnabled(false);
-		playing = false;
+		Panel.setPlaying(false);
 	}
 
 	public static void setLabel(String s) {
