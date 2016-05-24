@@ -27,7 +27,7 @@ public class UserInterface extends JPanel implements ActionListener {
 
 		//label is the interface between the computer and the user.
 		//Messages are displayed with this JLabel.
-		label = new JLabel("Welcome to Checkers", JLabel.CENTER);
+		label = new JLabel("Welcome to Checkers.", JLabel.CENTER);
 
 		//endGame allows users quit in the middle of a game.
 		//It is disabled until the user starts a new game.
