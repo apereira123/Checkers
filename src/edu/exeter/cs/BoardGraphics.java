@@ -10,17 +10,14 @@ import java.util.Scanner;
 @SuppressWarnings("serial")
 public class BoardGraphics extends JPanel implements ActionListener {
 
-	private static JButton[][] buttons = new JButton[8][8];
-	private static ArrayList<Move> legalMoves;
-	private Scanner scan;
-	private static int row;
-	private static int col;
+	private static JButton[][] buttons = new JButton[8][8]; // Declare and define a 2-Dimensional array of buttons.
+	private static ArrayList<Move> legalMoves; // Declare an ArrayList of Move.
+	private Scanner scan; // Declare a scanner which will get the row and col from the button press.
+	private static int row; // Declare a variable to store the row of the button press.
+	private static int col; // Declare a variable to store the col of the button press.
 
+	
 	public BoardGraphics() {
-		setupGraphics();
-	}
-
-	public void setupGraphics() {
 		//setup panel
 		setLayout(new GridLayout(8,8));
 		setBackground(Color.gray);
@@ -42,6 +39,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		setBorderPaintedFalse();
 	}
 
+	
 	public void createButtons() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -50,6 +48,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
+	
 	public void setBackground() {
 		String s;
 		for (int row = 0; row < 8; row++) {
@@ -71,6 +70,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
+	
 	public void addButtons() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -79,7 +79,9 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
+	
 	public static void setIcons() {
+		
 		ImageIcon whitePawn = new ImageIcon("resources/white_pawn.png");
 		whitePawn.setImage(whitePawn.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
 		ImageIcon blackPawn = new ImageIcon("resources/black_pawn.png");
@@ -89,6 +91,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		ImageIcon blackKing = new ImageIcon("resources/black_king.png");
 		blackKing.setImage(blackKing.getImage().getScaledInstance(75,75,  java.awt.Image.SCALE_SMOOTH ));
 
+		
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				buttons[row][col].setOpaque(true);
@@ -111,6 +114,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
+	
 	public static void setBorderPaintedFalse() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -119,6 +123,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
+	
 	public static void setBorderPaintedTrue() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -128,6 +133,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
+	
 	public static void setBorders() {
 		setBorderPaintedTrue();
 		if (Panel.selectedRow == -1) {
@@ -144,6 +150,7 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 	}
 
+	
 	public void actionPerformed(ActionEvent e) {
 		scan = new Scanner(e.getActionCommand());
 		row = scan.nextInt();
@@ -154,21 +161,20 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		catch (Exception NullPointerException) {}
 	}
 
+	/* If the player clicked on one of the pieces that the player
+    can move, mark this row and col as selected and return.  (This
+    might change a previous selection.)  Reset the message, in
+    case it was previously displaying an error message. */
 	void doClickSquare(int row, int col) {
-
-		/* If the player clicked on one of the pieces that the player
-       can move, mark this row and col as selected and return.  (This
-       might change a previous selection.)  Reset the message, in
-       case it was previously displaying an error message. */
-
 		if (!Panel.isPlaying()) {
 			UserInterface.setLabel("Please start a new game.");
 			return;
 		}
 		
+		
 		setBorders();
 
-		for (int i = 0; i < legalMoves.size(); i++)
+		for (int i = 0; i < legalMoves.size(); i++) {
 			if (legalMoves.get(i).fromRow == row && legalMoves.get(i).fromCol == col) {
 				Panel.setSelectedRow(row);
 				Panel.setSelectedCol(col);;
@@ -181,18 +187,19 @@ public class BoardGraphics extends JPanel implements ActionListener {
 				setBorders();
 				return;
 			}
-
+		}
+		
 		/* If no piece has been selected to be moved, the user must first
-       select a piece.  Show an error message and return. */
+        select a piece.  Show an error message and return. */
 		if (Panel.getSelectedRow() < 0) {
 			UserInterface.setLabel("Click the piece you want to move.");
 			return;
 		}
 
 		/* If the user clicked on a square where the selected piece can be
-       legally moved, then make the move and return. */
+        legally moved, then make the move and return. */
 
-
+		
 		setBorders();
 
 		for (int i = 0; i < legalMoves.size(); i++) {
@@ -203,27 +210,21 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 
 		/* If we get to this point, there is a piece selected, and the square where
-       the user just clicked is not one where that piece can be legally moved.
-       Show an error message. */
-
+        the user just clicked is not one where that piece can be legally moved.
+        Show an error message. */
 		UserInterface.setLabel("Click the square you want to move to.");
 
-	}  // end doClickSquare()
+	}
 
-
+	// This is called when the current player has chosen the specified move.
+	// Make the move, and then either end or continue the game appropriately.
 	public void doMakeMove(Move move) {
-		// This is called when the current player has chosen the specified
-		// move.  Make the move, and then either end or continue the game
-		// appropriately.
-
 		Board.makeMove(move);
 
 		/* If the move was a jump, it's possible that the player has another
-       jump.  Check for legal jumps starting from the square that the player
-       just moved to.  If there are any, the player must jump.  The same
-       player continues moving.
-		 */
-
+        jump.  Check for legal jumps starting from the square that the player
+        just moved to.  If there are any, the player must jump.  The same
+        player continues moving. */
 		if (move.isJump()) {
 			legalMoves = Board.getLegalJumpsFrom(Panel.getPlayer(),move.toRow,move.toCol);
 			if (legalMoves != null) {
@@ -242,9 +243,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		}
 
 		/* The current player's turn is ended, so change to the other player.
-       Get that player's legal moves.  If the player has no legal moves,
-       then the game ends. */
-
+        Get that player's legal moves.  If the player has no legal moves,
+        then the game ends. */
 		if (Panel.getPlayer() == Board.WHITE) {
 			Panel.setPlayer(Board.BLACK);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
@@ -268,13 +268,11 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 		/* Set selectedRow = -1 to record that the player has not yet selected
         a piece to move. */
-
 		Panel.setSelectedRow(-1);
 
 		setIcons();
 		setBorders();
-
-	}  // end doMakeMove();
+	}
 
 	public static void setLegalMoves(ArrayList<Move> moves) {
 		legalMoves = moves;

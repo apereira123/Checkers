@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Board {
 
-	//Create constants to refer to the pieces in the array.
+	// Create constants to refer to the pieces in the array.
 	public static final int
 	EMPTY = 0,
 	WHITE = 1,
@@ -12,11 +12,11 @@ public class Board {
 	WHITE_KING = 3,
 	BLACK_KING = 4;
 
-	//Create a 2-Dimensional array of all the pieces on the board.
+	// Create a 2-Dimensional array of all the pieces on the board.
 	private static int[][] board = new int[8][8];
 
+	// Set the corresponding spaces to the values of the piece at that position.
 	public static void setupBoard() {
-		//Set the corresponding spaces to the values of the piece at that position.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if ( row % 2 == col % 2 ) {
@@ -37,8 +37,8 @@ public class Board {
 		}
 	}
 
+	// Set the entire board to be empty.
 	public static void clearBoard() {
-		//Set the entire board to be empty.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				board[row][col] = EMPTY;
@@ -46,22 +46,22 @@ public class Board {
 		}
 	}
 
+	// Return the piece at the specified row and column.
 	public static int getPiece(int row, int col) {
-		//Return the piece at the specified row and column.
 		return board[row][col];
 	}
 
+	// Set the value of the piece at the specified row and column.
 	public static void setPiece(int row, int col, int rank) {
-		//Set the value of the piece at the specified row and column.
 		board[row][col] = rank;
 	}
 
+	/* If the move is legal, this will make the specified move.
+	This method takes care of the logic to move a piece. 
+	If the move is a jump, the jumped piece will be removed.
+	If the move results in the piece becoming a king, the
+	piece is set to a king. */
 	public static void makeMove(Move move) {
-		//If the move is legal, this will make the specified move.
-		//This method takes care of the logic to move a piece. 
-		//If the move is a jump, the jumped piece will be removed.
-		//If the move results in the piece becoming a king, the piece is set to a king.
-		
 		board[move.toRow][move.toCol] = board[move.fromRow][move.fromCol];
 		board[move.fromRow][move.fromCol] = EMPTY;
 		if (move.isJump()) {
@@ -77,11 +77,11 @@ public class Board {
 		}
 	}      
 
+	// Returns an ArrayList with all the legal moves for the player on the board.
+	// If there are no legal moves the method returns null.
 	public static ArrayList<Move> getLegalMoves(int player) {
-		//Returns an array with all the legal moves for the player on the board.
-		//If there are no legal moves the method returns null.
-
 		int playerKing;
+		
 		if (player == WHITE) {
 			playerKing = WHITE_KING;
 		}
@@ -91,9 +91,8 @@ public class Board {
 
 		ArrayList<Move> moves = new ArrayList<Move>();
 
-		//Here we check for jumps first. If there are any legal jumps in
-		//any of the four directions of travel the move is added to the vector.
-
+		// Here we check for jumps first. If there are any legal jumps in any of 
+		// the four directions of travel the move is added to the ArrayList moves.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if (board[row][col] == player || board[row][col] == playerKing) {
@@ -113,8 +112,7 @@ public class Board {
 			}
 		}
 
-		//Next we check for any legal moves and add them to the vector.
-
+		// Next we check for any legal moves and add them to the ArrayList moves.
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if (board[row][col] == player || board[row][col] == playerKing) {
@@ -133,27 +131,24 @@ public class Board {
 				}
 			}
 		}
-
-		//If no legal moves are found, we return null, otherwise we
-		//create an array large enough to hold all of the legal moves.
-
+ 
+		// If no legal moves are found, we return null, otherwise we return moves.
 		if (moves.size() == 0) {
 			return null;
 		}
 		else {
 			return moves;
 		}
-
 	}
 
-
+	/* Returns an ArrayList with all the legal jumps that the specified player
+	can make starting from the specified row and column. If there are no
+	legal jumps null is returned. This method is used when making successive
+	jumps, i.e. double-jumping, triple-jumping, etc. The logic is similar to
+	getLegalMoves(). */
 	public static ArrayList<Move> getLegalJumpsFrom(int player, int row, int col) {
-		// Return a list of the legal jumps that the specified player can
-		// make starting from the specified row and column.  If no such
-		// jumps are possible, null is returned.  The logic is similar
-		// to the logic of the getLegalMoves() method.
-
 		int playerKing;  // The constant representing a King belonging to player.
+		
 		if (player == WHITE) {
 			playerKing = WHITE_KING;
 		}
@@ -184,17 +179,14 @@ public class Board {
 		else {
 			return moves;
 		}
-		
-	}  // end getLegalJumpsFrom()
+	}
 
-
+	/* This is called by the two previous methods to check whether the
+	player can legally jump from (r1,c1) to (r3,c3).  It is assumed
+	that the player has a piece at (r1,c1), that (r3,c3) is a position
+	that is 2 rows and 2 columns distant from (r1,c1) and that 
+	(r2,c2) is the square between (r1,c1) and (r3,c3). */
 	private static boolean canJump(int player, int r1, int c1, int r2, int c2, int r3, int c3) {
-		// This is called by the two previous methods to check whether the
-		// player can legally jump from (r1,c1) to (r3,c3).  It is assumed
-		// that the player has a piece at (r1,c1), that (r3,c3) is a position
-		// that is 2 rows and 2 columns distant from (r1,c1) and that 
-		// (r2,c2) is the square between (r1,c1) and (r3,c3).
-
 		if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8) {
 			return false;  // (r3,c3) is off the board.
 		}
@@ -219,16 +211,13 @@ public class Board {
 			}
 			return true;  // The jump is legal.
 		}
+	}
 
-	}  // end canJump()
-
-
+	/* This is called by the getLegalMoves() method to determine whether
+	the player can legally move from (r1,c1) to (r2,c2).  It is
+	assumed that (r1,r2) contains one of the player's pieces and
+	that (r2,c2) is a neighboring square. */
 	private static boolean canMove(int player, int r1, int c1, int r2, int c2) {
-		// This is called by the getLegalMoves() method to determine whether
-		// the player can legally move from (r1,c1) to (r2,c2).  It is
-		// assumed that (r1,r2) contains one of the player's pieces and
-		// that (r2,c2) is a neighboring square.
-
 		if (r2 < 0 || r2 >= 8 || c2 < 0 || c2 >= 8) {
 			return false;  // (r2,c2) is off the board.
 		}
@@ -247,7 +236,6 @@ public class Board {
 			}
 			return true;  // The move is legal.
 		}
-
 	}
 
 }
