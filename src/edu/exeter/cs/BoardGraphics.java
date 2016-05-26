@@ -18,25 +18,19 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 	
 	public BoardGraphics() {
-		//setup panel
-		setLayout(new GridLayout(8,8));
-		setBackground(Color.gray);
-		setPreferredSize(new Dimension(700, 700));
+		setLayout(new GridLayout(8,8)); // setup panel
+		setBackground(Color.gray); // setup panel
+		setPreferredSize(new Dimension(700, 700)); // setup panel
 
-		//create buttons
-		createButtons();
+		createButtons(); // Create buttons
 
-		//set background color
-		setBackground();
+		setBackground(); // Set background color
 
-		//add buttons
-		addButtons();
+		addButtons(); // Add buttons
 
-		//draw buttons
-		setIcons();
+		setIcons(); // Draw buttons
 		
-		//set the border not to be painted
-		setBorderPaintedFalse();
+		setBorderPaintedFalse(); // Set the border not to be painted
 	}
 
 	// Makes a new button at each coordinate in the array of buttons.
