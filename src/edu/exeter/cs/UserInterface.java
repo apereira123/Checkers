@@ -97,6 +97,7 @@ public class UserInterface extends JPanel implements ActionListener {
 	void endGame() {
 		Board.clearBoard();
 		BoardGraphics.setIcons();
+		BoardGraphics.setBorderPaintedFalse();
 		if (Panel.getPlayer() == Board.WHITE) {
 			gameOver("White quits. Black wins.");
 		}

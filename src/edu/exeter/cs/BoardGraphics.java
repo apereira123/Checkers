@@ -34,6 +34,9 @@ public class BoardGraphics extends JPanel implements ActionListener {
 
 		//draw buttons
 		setIcons();
+		
+		//set the border not to be painted
+		setBorderPaintedFalse();
 	}
 
 	// Makes a new button at each coordinate in the array of buttons.
@@ -111,9 +114,30 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
+	// This methods makes setBorderPainted() false.
+	public static void setBorderPaintedFalse() {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				buttons[row][col].setBorderPainted(false);
+			}
+		}
+	}
+
+	// This methods makes setBorderPainted() true.
+	public static void setBorderPaintedTrue() {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				buttons[row][col].setBorderPainted(true);
+				buttons[row][col].setBorder(null);
+			}
+		}
+	}
 
 	// This method draws a border around legal moves.
 	public static void setBorders() {
+		setBorderPaintedTrue();
+		
 		// Here we highlight pieces that have legal moves.
 		if (Panel.selectedRow == -1) {
 			for (int i = 0; i < legalMoves.size(); i++) {
