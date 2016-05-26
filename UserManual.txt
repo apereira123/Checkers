@@ -9,11 +9,13 @@ Layout:
 	- Click “new game” afterwards if you want to play again.
 - The interface between the computer and the user is located at the bottom of the board.
 	- It will print out messages notifying the user whose turn it is, whether a user has selected a legal piece to move, announce the winner, etc.
-
-Movement:
-- Each pawn can only move in the direction its color faces. Once a pawn reaches the other side, it becomes a king (which is indicated by a crown) and then can move any direction diagonally.
-- Even if it is possible to jump a piece, the player does not have to jump it; the player has free movement, meaning it can move another piece if any other pieces still remain. If only one piece remains, it must be moved every turn.
 - Pieces you can move will be highlighted in blue.
 - After you click on a piece the possible moves for that piece will be outlined in blue.
+
+Movement:
+- Each pawn can only move in the direction its color faces.
+- Once a pawn reaches the other side, it becomes a king (which is indicated by a crown) and then can move any direction diagonally.
+- Even if it is possible to jump a piece, the player does not have to jump it; the player has free movement, meaning it can move another piece if any other pieces still remain.
+- If only one piece remains, it must be moved every turn.
 - After you jump a piece, if you are able to jump again you have to.
 - Even if a player has pieces remaining, if they cannot legally move any of those pieces they lose.
