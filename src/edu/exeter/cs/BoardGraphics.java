@@ -155,9 +155,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 		// Highlight pieces which have legal moves.
 		setBorders();
 
-		/* If the player clicked on one of the pieces that the player
-		* can move, mark this row and col as selected and return. (This
-		* might change a previous selection.) Reset the message. */
+		// If the player clicked on one of the pieces that the player
+		// can move, this will mark the row and col as selected and return.
 		for (int i = 0; i < legalMoves.size(); i++) {
 			if (legalMoves.get(i).fromRow == row && legalMoves.get(i).fromCol == col) {
 				Panel.setSelectedRow(row);
@@ -225,9 +224,8 @@ public class BoardGraphics extends JPanel implements ActionListener {
 			}
 		}
 
-		/* The current player's turn is ended, so change to the other player.
-        * Get that player's legal moves. If the player has no legal moves,
-        * then the game ends. */
+		// Here we end the current player's turn and change to the other player.
+        // If the other player has no legal moves, then the game ends.
 		if (Panel.getPlayer() == Board.WHITE) {
 			Panel.setPlayer(Board.BLACK);
 			legalMoves = Board.getLegalMoves(Panel.getPlayer());
