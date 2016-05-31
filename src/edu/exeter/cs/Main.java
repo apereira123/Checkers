@@ -3,7 +3,6 @@ package edu.exeter.cs;
 import javax.swing.JFrame;
 
 public class Main {
-
 	//Create the frame and add the main panel (Panel) to it.
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Checker Board");
